@@ -1,0 +1,19 @@
+{
+  "name": "techdegree-project-10",
+  "version": "1.0.0",
+  "description": "Full Stack App with React and a REST API",
+  "main": "app,js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/geenafong/techdegree-project-10.git"
+  },
+  "author": "Geena Fong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/geenafong/techdegree-project-10/issues"
+  },
+  "homepage": "https://github.com/geenafong/techdegree-project-10#readme"
+}
