@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 
 
@@ -7,7 +7,6 @@ class UserSignIn extends React.Component {
         emailAddress: "",
         password: "",
         signedIn: false
-
     }
     enterEmail = e => {
         this.setState({ emailAddress: e.target.value});
@@ -27,7 +26,7 @@ class UserSignIn extends React.Component {
                         <div><input ref={(input) => this.password = input} onChange={this.enterPassword} id="password" name="password" type="password" className="" placeholder="Password" value="" /> </div>
                         <div className="grid-100 pad-bottom">
                         <Link to={"/"}><button className="button" type="submit">Sign In</button></Link>
-                        <Link to={"/"}><button className="button button-secondary" onclick={this.cancel}>Cancel</button></Link>
+                        <Link to={"/"}><button className="button button-secondary" onClick={this.cancel}>Cancel</button></Link>
                         </div>
                     </form>
                 </div>

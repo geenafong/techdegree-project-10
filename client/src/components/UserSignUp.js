@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 
 
@@ -27,12 +27,6 @@ class UserSignUp extends React.Component {
     enterConfirmedPassword = e => {
         this.setState({ password: e.target.value});
     }
-    //  handleSubmit = e => {
-    //    e.preventDefault();
-    //    let signIn = this.signIn.value;
-    //    this.props.onSubmit(this.signIn.value);
-    //    e.currentTarget.reset();
-    //  }
      
     render() {
         return (
@@ -48,7 +42,7 @@ class UserSignUp extends React.Component {
                         <div><input ref={(input) => this.confirmPassword = input} onChange={this.enterConfirmedPassword} id="confirmPassword" name="confirmPassword" type="confirmPassword" className="" placeholder="Confirm Password" value="" /> </div>
                         <div className="grid-100 pad-bottom">
                         <Link to={"/"}><button className="button" type="submit">Sign Up</button></Link>
-                        <Link to={"/"}><button className="button button-secondary" onclick={this.cancel}>Cancel</button></Link>
+                        <Link to={"/"}><button className="button button-secondary" onClick={this.cancel}>Cancel</button></Link>
                         </div>
                     </form>
                 </div>
