@@ -9,6 +9,19 @@ const users = require("./routes/users");
 const mongoose = require("mongoose");
 const jsonParser = require('body-parser').json;
 
+// create the Express app
+const app = express();
+
+// middleware function to set the appropriate headers to support CORS
+app.use(function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  next()
+});
+
+
+
 //configure mongoose
 mongoose.connect("mongodb://localhost:27017/fsjstd-restapi");
 const db = mongoose.connection;
@@ -26,8 +39,6 @@ db.once("open", function(){
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
-// create the Express app
-const app = express();
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
