@@ -20,14 +20,7 @@ class Courses extends React.Component {
         isLoaded: true,
         courses: res.data
       })
-    });
-    // })
-    //    .then(json => {
-    //         this.setState({
-    //             isLoaded: true,
-    //             courses: response.data
-    //         });
-    //     });
+    })
   };
 
   render() {
@@ -35,13 +28,12 @@ class Courses extends React.Component {
     console.log(this.state.courses.length);
       courses = this.state.courses.map((course, index) => (
         <div className="grid-33" key={index}>
-          <Link className="course--module course--link" to={`/courses/${course._id}`}>Courses here</Link>
-            {/* <h4 className="course--label">Course</h4>
-            <h3 className="course--title">{course.title}</h3> */}
-          {/* </Link> */}
+          <Link className="course--module course--link" to={`/courses/${course._id}`}>Courses here
+            <h3 className="course--label">Course</h3>
+            <h4 className="course--title">{course.title}</h4>
+          </Link>
         </div>
-      ))
-    
+      ));
   
         return (
           <div className="bounds">
