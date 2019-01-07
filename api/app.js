@@ -20,8 +20,6 @@ app.use(function(req, res, next) {
   next()
 });
 
-
-
 //configure mongoose
 mongoose.connect("mongodb://localhost:27017/fsjstd-restapi");
 const db = mongoose.connection;

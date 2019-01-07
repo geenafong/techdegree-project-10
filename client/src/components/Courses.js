@@ -31,7 +31,7 @@ class Courses extends React.Component {
           <Link className="course--module course--link" to={`/courses/${course._id}`}>Courses here
             <h3 className="course--label">Course</h3>
             <h4 className="course--title">{course.title}</h4>
-          </Link>
+            </Link>
         </div>
       ));
   
