@@ -25,12 +25,11 @@ class Courses extends React.Component {
 
   render() {
     let courses = [];
-    console.log(this.state.courses.length);
       courses = this.state.courses.map((course, index) => (
         <div className="grid-33" key={index}>
           <Link className="course--module course--link" to={`/courses/${course._id}`}>Courses here
-            <h3 className="course--label">Course</h3>
-            <h4 className="course--title">{course.title}</h4>
+            <h4 className="course--label">Course</h4>
+            <h3 className="course--title">{course.title}</h3>
             </Link>
         </div>
       ));

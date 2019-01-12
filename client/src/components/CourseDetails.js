@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
 class CourseDetails extends React.Component {    
     constructor() {
@@ -31,18 +32,6 @@ class CourseDetails extends React.Component {
     }
     
   render(){
-    console.log(this.state.courses)
-    let materialsNeededIndiv;
-    let materialsList;
-    let removeEmptyString;
-    if(this.state.courses.materialsNeeded){
-      let materialsNeeded= this.state.courses.materialsNeeded;
-      materialsNeededIndiv = materialsNeeded.split('*');
-      removeEmptyString = materialsNeededIndiv.shift();
-      materialsList = materialsNeededIndiv.map((materialsNeededIndiv, index) =>(
-        <li key={index}>{removeEmptyString}</li>
-      ))
-    } 
    return (
     <div>
     <div className="actions--bar">
@@ -61,12 +50,12 @@ class CourseDetails extends React.Component {
 
           <div className="grid-66">
             <div className="course--header">
-              <h3 className="course--label">Course</h3>
-              <h4 className="course--title">{this.state.courses.title}</h4>
+              <h4 className="course--label">Course</h4>
+              <h3 className="course--title">{this.state.courses.title}</h3>
               <p>By: {(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"} </p>
             </div>
             <div className="course--description">
-            {this.state.courses.description}
+            <ReactMarkdown>{this.state.courses.description}</ReactMarkdown>
             </div>
           </div>
           <div className="grid-25 grid-right">
@@ -79,7 +68,7 @@ class CourseDetails extends React.Component {
                 <li className="course--stats--list--item">
                   <h4>Materials Needed</h4>
                   <ul>
-                    {(materialsNeededIndiv) ? materialsList : <li> No materials listed </li>}
+                  <ReactMarkdown>{this.state.courses.materialsNeeded}</ReactMarkdown>
                     
                   </ul>
                 </li>

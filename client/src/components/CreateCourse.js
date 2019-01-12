@@ -1,6 +1,25 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 export default class CreateCourse extends Component {
+  constructor() {
+    super();
+    this.state = {
+        courses:[],
+        isLoaded: false,
+        signedIn: false
+    }
+  }
+  //Instantiates network request 
+  componentDidMount() {
+    axios.post(`http://localhost:5000/api/courses/`)
+    .then(res => {
+      this.setState({
+        isLoaded: true,
+        courses: res.data
+      })
+    })
+  };
   render() {
     return (
         <div className="bounds course--detail">
@@ -32,7 +51,7 @@ export default class CreateCourse extends Component {
                 <ul className="course--stats--list">
                   <li className="course--stats--list--item">
                     <h4>Estimated Time</h4>
-                    <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input"
+                    <div> <input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input"
                         placeholder="Hours" value=""></input></div>
                   </li>
                   <li className="course--stats--list--item">
