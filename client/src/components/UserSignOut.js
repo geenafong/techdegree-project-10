@@ -2,7 +2,7 @@ import {withRouter} from 'react-router-dom'
 
 const SignOut = (props) => {
   props.signOut()
-  props.history.push("/")
+  props.history.push("/signin")
   return null;
 }
 

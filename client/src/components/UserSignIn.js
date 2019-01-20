@@ -10,8 +10,7 @@ class UserSignIn extends React.Component {
         this.state = {
         user: "",
         password: "",
-        emailAddress:"",
-        
+        emailAddress:""
         }
     }
 
@@ -29,7 +28,7 @@ class UserSignIn extends React.Component {
             <Consumer>
               {context => {
                 if (context.signedIn){
-                    this.props.history.goBack()
+                    this.props.history.push('/courses')
                 }
             return(
             <div className="bounds">

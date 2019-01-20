@@ -19,9 +19,10 @@ class UpdateCourse extends Component {
   }
   
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/courses/${this.props.id}`)
+    axios.get(`http://localhost:5000/api/courses/${this.props.params.match.id}`)
         .then(res => {
             this.setState({
+                description:res.data.description,
                 isLoaded: true,
                 courses: res.data
             })
@@ -30,7 +31,7 @@ class UpdateCourse extends Component {
 
 
 render() {
-    console.log(this.state)
+  console.log(this.state.description)
     return (
       <div className="bounds course--detail">
         <h1>Update Course</h1>

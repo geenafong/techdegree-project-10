@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import {Consumer} from './Context';
-import PropTypes from 'prop-types';
 
 
 class Header extends Component {  
-    static propTypes = {
-        user: PropTypes.object
-     };  
-
+    constructor() {
+        super();
+        this.state = {
+            id: "",
+            title:"",
+            description:"",
+            user:"",
+            courses:[],
+            isLoaded: false,
+            signedIn: false
+        }
+    }
 
     render(){
         return(
@@ -22,7 +29,7 @@ class Header extends Component {
                                 <nav>
                                  <span>
                                     Welcome, {context.user.firstName}</span>
-                                    <Link className="signout" to={"/signin"}>Log Out</Link> 
+                                    <Link className="signout" to={"/signout"}>Log Out</Link> 
                                </nav>
                         </div>
                     </div>

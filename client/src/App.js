@@ -15,14 +15,15 @@ import UpdateCourse from './components/UpdateCourse';
 import CourseDetails from './components/CourseDetails';
 import {Provider} from './components/Context';
 import axios from "axios";
+import PrivateRoute from './components/PrivateRoute';
 
 class App extends Component {
     state= {
         user:'',
         password:'',
         courses: [],
-        currentUser:false,
         signedIn:false,
+        currUser:false
     }
     
     signIn = (history, email, password) => {
@@ -54,7 +55,9 @@ class App extends Component {
                 lastName,
                 email,
                 password,
-                signedIn:true        
+                signedIn:true,
+                validUser: true,
+                currUser:true     
             });
 
             history.goBack();
@@ -72,11 +75,11 @@ class App extends Component {
       signOut = () => {
         this.setState({
           user: '',
-          currentUser: false,
+          signedIn: false,
         });
         localStorage.clear();
-        window.sessionStorage.clear()
-        window.location.reload();
+        // window.sessionStorage.clear();
+        // window.location.reload();
       }
       
 
@@ -87,15 +90,15 @@ class App extends Component {
             let email = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
             let user = { id, firstName,lastName, email, password }
-            console.log(user)
         return(
              <Provider value={{
                     user:this.state.user,
                     firstName:this.state.firstName,
                     password:this.state.password,
                     signedIn:this.state.signedIn,
-                  actions: {
-                    signIn:this.signIn
+                    actions: {
+                     signIn:this.signIn,
+                     signOut:this.signOut
                   }
               }}
               >
@@ -108,8 +111,8 @@ class App extends Component {
                         <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />}/>    
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
-                        <Route exact path='/courses/:id' component={CourseDetails}/>
-                        <Route exact path='/courses/:id/update' render={ (props) => <UpdateCourse user={user}/>}/>
+                        <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
+                        <PrivateRoute exact path='/courses/:id/update' component={UpdateCourse}/>                        
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>
