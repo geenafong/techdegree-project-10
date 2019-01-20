@@ -111,7 +111,7 @@ class App extends Component {
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
-                        <PrivateRoute exact path='/courses/:id/update' render={ ({match}) => <UpdateCourse id={match.params.id} />}/>                       
+                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>
