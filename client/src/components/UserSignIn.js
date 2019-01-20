@@ -2,19 +2,19 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import { Consumer } from './Context'
 import {withRouter} from 'react-router';
-import PropTypes from 'prop-types';
 
 
 class UserSignIn extends React.Component {
-    static propTypes = {
-        user: PropTypes.object,
-        signIn: PropTypes.func
-     };
+    constructor(){
+        super()
+        this.state = {
+        user: "",
+        password: "",
+        emailAddress:"",
+        
+        }
+    }
 
-     state = {
-        emailAddress:'',
-        password:''
-     }
     handleChange = e => {
         this.setState({[e.target.id]: e.target.value});
     }
@@ -29,15 +29,15 @@ class UserSignIn extends React.Component {
             <Consumer>
               {context => {
                 if (context.signedIn){
-                    this.props.history.push('/courses')
+                    this.props.history.goBack()
                 }
             return(
             <div className="bounds">
                 <div className="grid-33 centered signin">
                 <h1>Sign In</h1>
                 <form onSubmit={this.handleSubmit}>
-                        <div><input id="emailAddress" name="emailAddress" onChange ={this.handleChange} type="text" className="" placeholder="Email Address" value={this.state.emailAddress} /> </div>
-                        <div><input id="password" name="password" onChange={this.handleChange} type="password" className="" placeholder="Password" value={this.state.password} /> </div>
+                        <div><input id="emailAddress" name="emailAddress" onChange ={this.handleChange} type="text" className="" placeholder="Email Address" ref={(input) => this.user = input} value={this.state.emailAddress} /> </div>
+                        <div><input id="password" name="password" onChange={this.handleChange} type="password" className="" placeholder="Password" ref={(input) => this.password = input} value={this.state.password} /> </div>
                         <div className="grid-100 pad-bottom"><button className="button" type="submit">Sign In</button>
                         <Link to="/courses"><button className="button button-secondary">Cancel</button></Link></div>
 

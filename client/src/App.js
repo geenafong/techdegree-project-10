@@ -78,7 +78,7 @@ class App extends Component {
         window.sessionStorage.clear()
         window.location.reload();
       }
-
+      
 
     render() {
             let id = localStorage.getItem('id');
