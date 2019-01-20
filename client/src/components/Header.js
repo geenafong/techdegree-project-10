@@ -8,13 +8,7 @@ class Header extends Component {
     static propTypes = {
         user: PropTypes.object
      };  
-    signOut = () => {
-        this.setState({
-            signedIn:false
-        })
-        window.location.reload();
-        localStorage.clear();
-    }
+
 
     render(){
         return(
@@ -24,11 +18,12 @@ class Header extends Component {
                 return (
                     <div className="header">
                         <div className="bounds">
-                            <h1 className="header--logo"> Courses</h1>
-                                <div>
-                                <Link to="/">Welcome, {this.props.user.firstName}</Link>
-                                <Link to="/signin" onClick={this.signOut}>Log Out</Link>
-                                </div>
+                            <Link to="/"><h1 className="header--logo"> Courses</h1></Link>
+                                <nav>
+                                 <span>
+                                    Welcome, {context.user.firstName}</span>
+                                    <Link className="signout" to={"/signin"}>Log Out</Link> 
+                               </nav>
                         </div>
                     </div>
                 )
@@ -36,10 +31,10 @@ class Header extends Component {
             return(
                 <div className="header">
                     <div className="bounds">
-                        <h1 className="header--logo"><Link to="/">Courses</Link></h1>
+                        <Link to="/"><h1 className="header--logo"> Courses</h1></Link>
                         <nav>
-                            <Link to='/signUp' className="signup">Sign Up</Link>
                             <Link to='/signIn' className="signin">Sign In</Link>
+                            <Link to='/signUp' className="signup">Sign Up</Link>
                         </nav>
                     </div>
                 </div>

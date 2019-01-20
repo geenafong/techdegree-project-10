@@ -54,6 +54,15 @@ router.use(function(req, res, next){
     }
 });
 
+// GET /api/users 200 - Returns the currently authenticated user
+router.get("/users", function (req, res, next) {
+    User.find({}) 
+       .exec(function(err, user){
+           if(err) return next(err);
+            res.json(req.user);
+       });
+});
+
 //To check for IDs
 router.param("id", function(req,res,next,id){
     Course.findById(id, function(err, doc){
@@ -111,5 +120,6 @@ router.delete("/courses/:id", function (req, res, next) {
         return next(err);
     }
 });
+
 
 module.exports = router;

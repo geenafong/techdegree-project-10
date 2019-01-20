@@ -1,20 +1,16 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 import { Consumer } from './Context'
-import PropTypes from 'prop-types';
 import {withRouter} from 'react-router';
-
-
+import PropTypes from 'prop-types';
 
 
 class UserSignIn extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-          user: '',
-          password: '',
-        }
-      }
+    static propTypes = {
+        user: PropTypes.object,
+        signIn: PropTypes.func
+     };
+
      state = {
         emailAddress:'',
         password:''
@@ -26,7 +22,6 @@ class UserSignIn extends React.Component {
     handleSubmit = e => {
         e.preventDefault();
         this.props.signIn(this.props.history, this.state.emailAddress, this.state.password)
-        console.log(this.props.emailAddress);
     }
      
     render() {
@@ -34,7 +29,7 @@ class UserSignIn extends React.Component {
             <Consumer>
               {context => {
                 if (context.signedIn){
-                    this.props.history.push('/')
+                    this.props.history.push('/courses')
                 }
             return(
             <div className="bounds">
@@ -53,7 +48,7 @@ class UserSignIn extends React.Component {
             </div>
             );
             }}
-           </Consumer>
+        </Consumer>
         );
     }
 }

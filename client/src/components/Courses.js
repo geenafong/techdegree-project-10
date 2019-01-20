@@ -15,14 +15,13 @@ class Courses extends React.Component {
     //Instantiates network request 
   componentDidMount() {
     axios.get(`http://localhost:5000/api/courses/`)
-    .then(res => res.json)
     .then(res => {
       this.setState({
         isLoaded: true,
-        courses: res
+        courses: res.data
       })
     })
-    .catch(err => console.log('Unable to fetch data', err))
+     .catch(err => console.log('Unable to fetch data',err))
   };
 
   render() {
