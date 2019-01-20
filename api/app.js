@@ -2,7 +2,6 @@
 
 // load modules
 const express = require('express');
-
 const morgan = require('morgan');
 const courses = require("./routes/courses");
 const users = require("./routes/users");

@@ -2,7 +2,6 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import {Link} from 'react-router-dom';
-import ReactMarkdown from 'react-markdown';
 
 class UpdateCourse extends Component {    
   constructor() {
@@ -11,6 +10,7 @@ class UpdateCourse extends Component {
         courses:[],
         description:"",
         title:"",
+        id:"",
         user:"",
         estimatedTime:"",
         isLoaded: false,
@@ -19,7 +19,7 @@ class UpdateCourse extends Component {
   }
   
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
+    axios.get(`http://localhost:5000/api/courses/${this.props.id}`)
         .then(res => {
             this.setState({
                 isLoaded: true,
@@ -30,7 +30,7 @@ class UpdateCourse extends Component {
 
 
 render() {
-    console.log(this.state.courses.description)
+    console.log(this.state)
     return (
       <div className="bounds course--detail">
         <h1>Update Course</h1>
@@ -44,7 +44,7 @@ render() {
                 <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>
               </div>
               <div className="course--description">
-              <div><textarea id="description" type="text" name="description" placeholder="Course description..." defaultValue={this.state.courses.description}/></div>
+              <div><textarea id="description" type="text" name="description" placeholder="Course description..." value={this.state.courses.description}/></div>
               </div>
             </div>
             <div className="grid-25 grid-right">
@@ -62,7 +62,7 @@ render() {
               </div>
             </div>
             <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button>
-            <Link className="button button-secondary" to={`/courses/${this.props.match.params.id}`}>Cancel</Link></div>
+            <Link className="button button-secondary" to={`/courses/${this.props.id}`}>Cancel</Link></div>
           </form>
         </div>
       </div>

@@ -38,7 +38,7 @@ class CourseDetails extends React.Component {
       <div className="bounds">
         <div className="grid-100">
           <span>
-            <Link className="button" to={`${this.props.match.params.id}/update`}>Update Course</Link>
+            <Link className="button" to={`${this.props.id}/update`}>Update Course</Link>
             <button className="button" onClick={this.deleteCourse}>Delete Course</button>
           </span>
           <Link className="button button-secondary" to="/">Return to List</Link>

@@ -5,10 +5,11 @@ export default class CreateCourse extends Component {
   constructor() {
     super();
     this.state = {
-        courses:[],
+        user:"",
         isLoaded: false,
         signedIn: false
     }
+
   }
   //Instantiates network request 
   componentDidMount() {
@@ -38,7 +39,7 @@ export default class CreateCourse extends Component {
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
-                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
+                <div><input ref={(input) => this.state.courses.title = input}id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
                     value=""></input></div>
                 <p>By Joe Smith</p>
               </div>
