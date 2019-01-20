@@ -13,7 +13,8 @@ class CourseDetails extends React.Component {
             user:"",
             courses:[],
             isLoaded: false,
-            signedIn: false
+            signedIn: false,
+            isAuthenticated:false
         }
     }
     
@@ -22,7 +23,8 @@ class CourseDetails extends React.Component {
             .then(res => {
                 this.setState({
                     isLoaded: true,
-                    courses: res.data
+                    courses: res.data,
+                    isAuthenticated:true
                 })
             });
     };

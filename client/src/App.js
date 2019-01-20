@@ -23,7 +23,7 @@ class App extends Component {
         password:'',
         courses: [],
         signedIn:false,
-        currUser:false
+        isAuthenticated:false
     }
     
     signIn = (history, email, password) => {
@@ -56,8 +56,7 @@ class App extends Component {
                 email,
                 password,
                 signedIn:true,
-                validUser: true,
-                currUser:true     
+                isAuthenticated:true     
             });
 
             history.goBack();
@@ -76,10 +75,9 @@ class App extends Component {
         this.setState({
           user: '',
           signedIn: false,
+          isAuthenticated:false
         });
         localStorage.clear();
-        // window.sessionStorage.clear();
-        // window.location.reload();
       }
       
 
@@ -95,6 +93,7 @@ class App extends Component {
                     user:this.state.user,
                     firstName:this.state.firstName,
                     password:this.state.password,
+                    isAuthenticated:this.state.isAuthenticated,
                     signedIn:this.state.signedIn,
                     actions: {
                      signIn:this.signIn,
@@ -112,7 +111,7 @@ class App extends Component {
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
-                        <PrivateRoute exact path='/courses/:id/update' component={UpdateCourse}/>                        
+                        <PrivateRoute exact path='/courses/:id/update' render={ ({match}) => <UpdateCourse id={match.params.id} />}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>

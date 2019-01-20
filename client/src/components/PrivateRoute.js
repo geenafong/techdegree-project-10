@@ -3,24 +3,31 @@ import React, { Component } from 'react';
 import {
     Route, 
     Redirect} from 'react-router-dom';
+import { Consumer } from './Context'
+
 
 function PrivateRoute({ component: Component, ...rest }) {
     return (
-    <Route
-      {...rest}
-      render={props =>
-        sessionStorage.getItem('auth') ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{
-              pathname: "/signIn",
-              state: {from: props.location}
-            }}
-          />
-        )
-      }
-    />
+    <Consumer>
+     {context => {
+         return(
+            <Route
+            {...rest}
+            render={props =>
+                context.isAuthenticated ? (
+                <Component {...props}/>
+                ) : (
+                <Redirect
+                    to={{
+                    pathname: "/signIn",
+                    }}
+                />
+                )
+            }
+            />
+         )
+      }}
+    </Consumer>
   );
 }
 export default PrivateRoute;
