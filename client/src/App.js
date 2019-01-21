@@ -17,11 +17,13 @@ import {Provider} from './components/Context';
 import axios from "axios";
 import PrivateRoute from './components/PrivateRoute';
 
+
 class App extends Component {
     state= {
         user:'',
         password:'',
         courses: [],
+        currentUser:false,
         signedIn:false,
         currentUser: false,
         currUser: false,
@@ -93,6 +95,7 @@ class App extends Component {
             let email = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
             let user = { id, firstName,lastName, email, password }
+            console.log(user)
         return(
              <Provider value={{
                     user:this.state.user,
@@ -100,9 +103,8 @@ class App extends Component {
                     password:this.state.password,
                     isAuthenticated:this.state.isAuthenticated,
                     signedIn:this.state.signedIn,
-                    actions: {
-                     signIn:this.signIn,
-                     signOut:this.signOut
+                  actions: {
+                    signIn:this.signIn
                   }
               }}
               >

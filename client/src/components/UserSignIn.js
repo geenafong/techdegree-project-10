@@ -10,9 +10,7 @@ class UserSignIn extends React.Component {
         this.state = {
         user: "",
         password: "",
-        emailAddress:"",
-        currUser:false,
-        currentUser:false
+        emailAddress:""
         }
     }
 
@@ -53,5 +51,4 @@ class UserSignIn extends React.Component {
         );
     }
 }
-
 export default withRouter (UserSignIn);
