@@ -23,6 +23,7 @@ class App extends Component {
     state= {
         user:'',
         password:'',
+        emailAddress:'',
         courses: [],
         currentUser:false,
         signedIn:false,
@@ -32,10 +33,10 @@ class App extends Component {
     }
     
     //creates a method called signIn that gets the user's credentials and stores it in a local database that is used to check for authorization
-    signIn = (history, email, password) => {
+    signIn = (history, emailAddress, password) => {
      axios.get('http://localhost:5000/api/users', {
         auth: {
-            username: email, 
+            username: emailAddress, 
             password: password
         },
         
@@ -47,13 +48,13 @@ class App extends Component {
             localStorage.setItem('id', response.data._id);
             localStorage.setItem('firstName', response.data.firstName);
             localStorage.setItem('lastName', response.data.lastName);
-            localStorage.setItem('emailAddress', response.emailAddress);
+            localStorage.setItem('emailAddress', response.data.emailAddress);
             localStorage.setItem('password', response.data.password);
             
             let id = localStorage.getItem('id');
             let firstName = localStorage.getItem('firstName');
             let lastName = localStorage.getItem('lastName');
-            let email = localStorage.getItem('emailAddress');
+            let emailAddress = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
             
             //sets the state for the user when signed in
@@ -62,7 +63,7 @@ class App extends Component {
                 id,
                 firstName,
                 lastName,
-                email,
+                emailAddress,
                 password,
                 signedIn:true,
                 isAuthenticated:true,
@@ -103,9 +104,9 @@ class App extends Component {
             let id = localStorage.getItem('id');
             let firstName = localStorage.getItem('firstName');
             let lastName = localStorage.getItem('lastName');
-            let email = localStorage.getItem('emailAddress');
+            let emailAddress = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
-            let user = { id, firstName,lastName, email, password }
+            let user = { id, firstName,lastName, emailAddress, password }
         return(
             //the authenticated user and the user sign in and sign out methods are defined using a Context API <Provider> component
              <Provider value={{
