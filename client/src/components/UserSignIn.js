@@ -10,7 +10,9 @@ class UserSignIn extends React.Component {
         this.state = {
         user: "",
         password: "",
-        emailAddress:""
+        emailAddress:"",
+        currUser:false,
+        currentUser:false
         }
     }
 

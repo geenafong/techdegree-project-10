@@ -23,6 +23,8 @@ class App extends Component {
         password:'',
         courses: [],
         signedIn:false,
+        currentUser: false,
+        currUser: false,
         isAuthenticated:false
     }
     
@@ -56,7 +58,10 @@ class App extends Component {
                 email,
                 password,
                 signedIn:true,
-                isAuthenticated:true     
+                isAuthenticated:true,
+                currUser:true,
+                validUser:true
+
             });
 
             history.goBack();

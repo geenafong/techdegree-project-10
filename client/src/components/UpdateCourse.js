@@ -19,7 +19,7 @@ class UpdateCourse extends Component {
   }
   
   componentDidMount() {
-    axios.get(`http://localhost:5000/api/courses/${this.props.params.match.id}`)
+    axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
         .then(res => {
             this.setState({
                 description:res.data.description,
