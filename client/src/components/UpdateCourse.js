@@ -17,26 +17,57 @@
          signedIn: false
      }
    }
-   
-   componentDidMount() {
+  //  GETS the courses
+   componentWillMount() {
      axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
          .then(res => {
              this.setState({
-                 description:res.data.description,
+                 user: res.user,
                  isLoaded: true,
-                 courses: res.data
+                 courses: res.data,
+                 description:res.description
              })
-         });
-   };
+         }) 
+        //  .then(res => {
+        //    if(this.res.user._id !== this.props.user.id){
+        //      this.props.history.push('/signin')
+        //    }
+        //  })
+       }
  
- 
+  updateCourse = (title, user, email, password, description, estimatedTime,materialsNeeded) => {
+     
+    axios.put(`http://localhost:5000/api/courses/${this.props.id}`,{
+        title:title,
+        description:description,
+        estimatedTime:estimatedTime,
+        materialsNeeded:materialsNeeded,
+    }, localStorage.getItem('auth')
+    ) .then(res =>{
+      if(res.status === 204 || res.status === 304) {
+        console.log(this.state.title)
+        this.props.history.push(`/courses/${this.props.id}`)
+      }
+    }).catch(err =>{
+        console.log(err);
+      }) 
+    }
+  
+    handleChange = e => {
+      this.setState({[e.target.id]: e.target.value});
+    }
+  
+    handleSubmit = e => {
+      e.preventDefault();
+      this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
+    }
+
  render() {
-   console.log(this.state.description)
      return (
        <div className="bounds course--detail">
          <h1>Update Course</h1>
          <div>
-           <form>
+         <form onSubmit={this.handleSubmit}>
              <div className="grid-66">
                <div className="course--header">
                  <h4 className="course--label">Course</h4>
@@ -45,7 +76,7 @@
                  <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>
                </div>
                <div className="course--description">
-               <div><textarea id="description" type="text" name="description" placeholder="Course description..." value={this.state.courses.description}/></div>
+               <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.courses.description}></textarea></div>
                </div>
              </div>
              <div className="grid-25 grid-right">
@@ -53,17 +84,17 @@
                  <ul className="course--stats--list">
                    <li className="course--stats--list--item">
                      <h4>Estimated Time</h4>
-                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" defaultValue={this.state.courses.estimatedTime} /></div>
+                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} defaultValue={this.state.courses.estimatedTime} /></div>
                    </li>
                    <li className="course--stats--list--item">
                      <h4>Materials Needed</h4>
-                     <div><textarea id="materialsNeeded" name="materialsNeeded" type="text" className="" placeholder="List materials..." defaultValue={this.state.courses.materialsNeeded}></textarea></div>
+                     <div><textarea id="materialsNeeded" name="materialsNeeded" type="text" className="" placeholder="List materials..." onChange={this.handleChange} value={this.state.courses.materialsNeeded}></textarea></div>
                    </li>
                  </ul>
                </div>
              </div>
              <div className="grid-100 pad-bottom"><button className="button" type="submit">Update Course</button>
-             <Link className="button button-secondary" to={`/courses/${this.props.id}`}>Cancel</Link></div>
+             <Link className="button button-secondary" to={`/courses`}>Cancel</Link></div>
            </form>
          </div>
        </div>

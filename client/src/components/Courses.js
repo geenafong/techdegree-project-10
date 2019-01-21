@@ -2,7 +2,7 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
 
-// Defines the Courses class/function
+// This component provides the "Courses" screen by retrieving the list of courses from the REST API's /api/courses route and rendering a list of courses.
 class Courses extends React.Component {
   constructor() {
     super();
@@ -12,7 +12,7 @@ class Courses extends React.Component {
         signedIn: false
     }
   }
-    //Instantiates network request 
+    //instantiates network request to get courses
   componentDidMount() {
     axios.get(`http://localhost:5000/api/courses/`)
     .then(res => {
@@ -23,7 +23,7 @@ class Courses extends React.Component {
     })
      .catch(err => console.log('Unable to fetch data',err))
   };
-
+ 
   render() {
     let courses = [];
       courses = this.state.courses.map((course, index) => (

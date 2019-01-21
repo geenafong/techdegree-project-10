@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
+//This component provides the "Create Course" screen by rendering a form that allows a user to create a new course.
 export default class CreateCourse extends Component {
   constructor() {
     super();
@@ -39,7 +40,7 @@ export default class CreateCourse extends Component {
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
-                <div><input ref={(input) => this.state.courses.title = input}id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
+                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
                     value=""></input></div>
                 <p>By Joe Smith</p>
               </div>

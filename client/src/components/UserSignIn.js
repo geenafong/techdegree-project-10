@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import { Consumer } from './Context'
 import {withRouter} from 'react-router';
 
-
+//This component provides the "Sign In" screen by rendering a form that allows a user to sign using their existing account information. 
 class UserSignIn extends React.Component {
     constructor(){
         super()
@@ -13,11 +13,12 @@ class UserSignIn extends React.Component {
         emailAddress:""
         }
     }
-
+    //a event handler that changes the state of the component when the value changes
     handleChange = e => {
         this.setState({[e.target.id]: e.target.value});
     }
 
+    //a event handler that calls the signIn method from the global state to check authentication
     handleSubmit = e => {
         e.preventDefault();
         this.props.signIn(this.props.history, this.state.emailAddress, this.state.password)
@@ -25,6 +26,7 @@ class UserSignIn extends React.Component {
      
     render() {
         return (
+            //uses the react context API provider component as a consumer to check for authenticaion
             <Consumer>
               {context => {
                 if (context.signedIn){

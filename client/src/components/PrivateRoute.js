@@ -5,7 +5,7 @@ import {
     Redirect} from 'react-router-dom';
 import { Consumer } from './Context'
 
-
+//defines a higher order component for configuring protected routes
 function PrivateRoute({ component: Component, ...rest }) {
     return (
     <Consumer>

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-
+//This component provides the "Sign Up" screen by rendering a form that allows a user to sign up by creating a new account
 class UserSignUp extends React.Component {
     state = {
         firstName:"",
@@ -12,6 +12,7 @@ class UserSignUp extends React.Component {
         signedIn: false
 
     }
+    //event handlers to change the state when the value of each changes
     enterFirstName = e => {
         this.setState({ firstName: e.target.value});
     }

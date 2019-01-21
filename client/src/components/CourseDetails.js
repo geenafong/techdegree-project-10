@@ -3,6 +3,7 @@ import axios from 'axios';
 import {Link} from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 
+//This component provides the "Course Detail" screen by retrieving the detail for a course from the REST API's /api/courses/:id route and rendering the course. 
 class CourseDetails extends React.Component {    
     constructor() {
         super();
@@ -17,7 +18,7 @@ class CourseDetails extends React.Component {
             isAuthenticated:false
         }
     }
-    
+    //Gets courses based off of their id
     componentDidMount() {
         axios.get(`http://localhost:5000/api/courses/${this.props.id}`)
             .then(res => {

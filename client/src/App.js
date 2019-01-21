@@ -19,6 +19,7 @@ import PrivateRoute from './components/PrivateRoute';
 
 
 class App extends Component {
+    //establishes the state of the component when no one is signed in
     state= {
         user:'',
         password:'',
@@ -30,6 +31,7 @@ class App extends Component {
         isAuthenticated:false
     }
     
+    //creates a method called signIn that gets the user's credentials and stores it in a local database that is used to check for authorization
     signIn = (history, email, password) => {
      axios.get('http://localhost:5000/api/users', {
         auth: {
@@ -38,7 +40,7 @@ class App extends Component {
         }
     })
     .then(response => {
-        //Enters users info into a local database to be used for authentication
+        //enters users info into a local database to be used for authentication
         if(response.status === 200 || response.status ===304) {
             localStorage.setItem('id', response.data._id);
             localStorage.setItem('firstName', response.data.firstName);
@@ -52,6 +54,7 @@ class App extends Component {
             let email = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
             
+            //sets the state for the user when signed in
             this.setState({
                 user:response.data,
                 id,
@@ -65,19 +68,20 @@ class App extends Component {
                 validUser:true
 
             });
-
+            //when signed in, the user goes back to the page that they left off at
             history.goBack();
         }
-    }) .catch(err => {
-            if(err.response.status === 401) {
-                this.setState({
-                    signedIn:false,
-                });
-                console.log(err);
-            }
-        })
-      }
-
+        //when a user is not in the user database, state is changed to false and they do not log in
+        }) .catch(err => {
+                if(err.response.status === 401) {
+                    this.setState({
+                        signedIn:false,
+                    });
+                    console.log(err);
+                }
+            })
+        }
+      //a method used to remove the authenticated user and password from the global state
       signOut = () => {
         this.setState({
           user: '',
@@ -87,7 +91,7 @@ class App extends Component {
         localStorage.clear();
       }
       
-
+    
     render() {
             let id = localStorage.getItem('id');
             let firstName = localStorage.getItem('firstName');
@@ -95,8 +99,8 @@ class App extends Component {
             let email = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
             let user = { id, firstName,lastName, email, password }
-            console.log(user)
         return(
+            //the authenticated user and the user sign in and sign out methods are defined using a Context API <Provider> component
              <Provider value={{
                     user:this.state.user,
                     firstName:this.state.firstName,
