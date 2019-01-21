@@ -18,37 +18,33 @@
      }
    }
   //  GETS the courses
-   componentWillMount() {
+   componentDidMount() {
      axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
          .then(res => {
              this.setState({
-                 user: res.user,
                  isLoaded: true,
                  courses: res.data,
-                 description:res.description
+                 description:res.data.description,
+                 materialsNeeded:res.data.materialsNeeded,
+                 estimatedTime:res.data.estimatedTime
              })
-         }) 
-        //  .then(res => {
-        //    if(this.res.user._id !== this.props.user.id){
-        //      this.props.history.push('/signin')
-        //    }
-        //  })
+          }) .catch(err =>{
+            console.log(err);
+          }) 
        }
  
-  updateCourse = (title, user, email, password, description, estimatedTime,materialsNeeded) => {
+  //method for a PUT request to update all of the changes that are made
+  updateCourse = (title, description, estimatedTime,materialsNeeded) => {
      
-    axios.put(`http://localhost:5000/api/courses/${this.props.id}`,{
+    axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
         title:title,
         description:description,
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
-    }, localStorage.getItem('auth')
+    }, {headers:{'Authorization':JSON.parse(localStorage.getItem('auth'))}}
     ) .then(res =>{
-      if(res.status === 204 || res.status === 304) {
-        console.log(this.state.title)
-        this.props.history.push(`/courses/${this.props.id}`)
-      }
-    }).catch(err =>{
+        this.props.history.push(`/courses`)
+      }).catch(err =>{
         console.log(err);
       }) 
     }
@@ -59,7 +55,7 @@
   
     handleSubmit = e => {
       e.preventDefault();
-      this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
+      this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded, this.state.id)
     }
 
  render() {
@@ -76,7 +72,7 @@
                  <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>
                </div>
                <div className="course--description">
-               <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.courses.description}></textarea></div>
+               <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.description}></textarea></div>
                </div>
              </div>
              <div className="grid-25 grid-right">
@@ -84,11 +80,11 @@
                  <ul className="course--stats--list">
                    <li className="course--stats--list--item">
                      <h4>Estimated Time</h4>
-                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} defaultValue={this.state.courses.estimatedTime} /></div>
+                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} defaultValue={this.state.estimatedTime} /></div>
                    </li>
                    <li className="course--stats--list--item">
                      <h4>Materials Needed</h4>
-                     <div><textarea id="materialsNeeded" name="materialsNeeded" type="text" className="" placeholder="List materials..." onChange={this.handleChange} value={this.state.courses.materialsNeeded}></textarea></div>
+                     <div><textarea id="materialsNeeded" name="materialsNeeded" type="text" className="" placeholder="List materials..." onChange={this.handleChange} value={this.state.materialsNeeded}></textarea></div>
                    </li>
                  </ul>
                </div>
