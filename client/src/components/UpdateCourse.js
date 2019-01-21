@@ -31,7 +31,7 @@
           }) .catch(err =>{
             console.log(err);
           }) 
-       }
+  }
  
   //method for a PUT request to update all of the changes that are made
   updateCourse = (title, description, estimatedTime,materialsNeeded) => {
