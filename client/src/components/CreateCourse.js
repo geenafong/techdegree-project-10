@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import {Link, withRouter} from 'react-router-dom';
 
 //This component provides the "Create Course" screen by rendering a form that allows a user to create a new course.
-export default class CreateCourse extends Component {
+class CreateCourse extends Component {
   constructor() {
     super();
     this.state = {
@@ -12,16 +13,34 @@ export default class CreateCourse extends Component {
     }
 
   }
-  //Instantiates network request 
-  componentDidMount() {
-    axios.post(`http://localhost:5000/api/courses/`)
-    .then(res => {
-      this.setState({
-        isLoaded: true,
-        courses: res.data
-      })
-    })
-  };
+   //method for a PUT request to update all of the changes that are made
+   createCourse = (title, description, estimatedTime,materialsNeeded) => {
+    axios.post(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
+      data:{
+        title:title,
+        description:description,
+        estimatedTime:estimatedTime,
+        materialsNeeded:materialsNeeded,
+      }
+    }, {auth: {
+      username: localStorage.getItem('emailAddress'),
+      password: localStorage.getItem('password')
+   }},
+    ) .then(res =>{
+        this.props.history.push(`/courses`)
+      }).catch(err =>{
+        console.log(err);
+      }) 
+    }
+  
+    handleChange = e => {
+      this.setState({[e.target.id]: e.target.value});
+    }
+  
+    handleSubmit = e => {
+      e.preventDefault();
+      this.createCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
+    }
   render() {
     return (
         <div className="bounds course--detail">
@@ -36,16 +55,14 @@ export default class CreateCourse extends Component {
               </ul>
             </div>
           </div>
-          <form>
+          <form onSubmit={this.handleSubmit}>
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
-                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
-                    value=""></input></div>
-                <p>By Joe Smith</p>
+                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onBlur={this.handleChange}></input></div>
               </div>
               <div className="course--description">
-                <div><textarea id="description" name="description" className="" placeholder="Course description..."></textarea></div>
+                <div><textarea id="description" name="description" className="" placeholder="Course description..." onBlur={this.handleChange}></textarea></div>
               </div>
             </div>
             <div className="grid-25 grid-right">
@@ -54,19 +71,21 @@ export default class CreateCourse extends Component {
                   <li className="course--stats--list--item">
                     <h4>Estimated Time</h4>
                     <div> <input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input"
-                        placeholder="Hours" value=""></input></div>
+                        placeholder="Hours" onBlur={this.handleChange}></input></div>
                   </li>
                   <li className="course--stats--list--item">
                     <h4>Materials Needed</h4>
-                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..."></textarea></div>
+                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." onBlur={this.handleChange}></textarea></div>
                   </li>
                 </ul>
               </div>
             </div>
-            <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><button class="button button-secondary" onclick="event.preventDefault(); location.href='index.html';">Cancel</button></div>
+            <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><button className="button button-secondary">Cancel</button></div>
           </form>
         </div>
       </div>
       );
     }
 };
+
+export default withRouter (CreateCourse);

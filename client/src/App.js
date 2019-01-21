@@ -37,11 +37,13 @@ class App extends Component {
         auth: {
             username: email, 
             password: password
-        }
+        },
+        
     })
     .then(response => {
         //enters users info into a local database to be used for authentication
         if(response.status === 200 || response.status ===304) {
+            
             localStorage.setItem('id', response.data._id);
             localStorage.setItem('firstName', response.data.firstName);
             localStorage.setItem('lastName', response.data.lastName);
@@ -68,12 +70,13 @@ class App extends Component {
                 validUser:true
 
             });
-            //when signed in, the user goes back to the page that they left off at
-            history.goBack();
+            
+            //when signed in, brings user back to the page they
+            history.goBack('/');
         }
         //when a user is not in the user database, state is changed to false and they do not log in
         }) .catch(err => {
-                if(err.response.status === 401) {
+                if(err) {
                     this.setState({
                         signedIn:false,
                     });
@@ -90,8 +93,12 @@ class App extends Component {
         });
         localStorage.clear();
       }
-      
-    
+      componentDidMount() {
+        if(localStorage.user){
+          let user = JSON.parse(localStorage.getItem('user'))
+          this.signIn(user.emailAddress, user.password)
+        }
+    }
     render() {
             let id = localStorage.getItem('id');
             let firstName = localStorage.getItem('firstName');
@@ -117,7 +124,7 @@ class App extends Component {
                     <Route path="/" render={() => <Header signOut={this.signOut}/>}/>
                     <Switch>
                         <Route exact path='/' render={ () => <Redirect to='/courses'/>} />
-                        <Route exact path="/courses" render={ props => <Courses />}/>
+                        <Route exact path="/courses" render={ () => <Courses />}/>
                         <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />}/>    
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>

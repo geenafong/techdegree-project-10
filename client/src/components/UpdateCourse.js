@@ -1,7 +1,7 @@
  //renders an "Update Course" button that when clicked sends a PUT request to the REST API's /api/courses/:id route.
  import React, {Component} from 'react';
  import axios from 'axios';
- import {Link} from 'react-router-dom';
+ import {Link, withRouter} from 'react-router-dom';
  
  class UpdateCourse extends Component {    
    constructor() {
@@ -103,4 +103,4 @@
    }
  };
  
- export default UpdateCourse;
+ export default withRouter(UpdateCourse);
