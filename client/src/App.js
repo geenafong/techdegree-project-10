@@ -113,7 +113,8 @@ class App extends Component {
                     isAuthenticated:this.state.isAuthenticated,
                     signedIn:this.state.signedIn,
                   actions: {
-                    signIn:this.signIn
+                    signIn:this.signIn,
+                    updateCourse:this.UpdateCourse
                   }
               }}
               >
@@ -127,7 +128,7 @@ class App extends Component {
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
-                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={user}/>                       
+                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={user} updateCourse= {this.updateCourse}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>

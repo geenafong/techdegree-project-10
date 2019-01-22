@@ -42,7 +42,7 @@
         description:description,
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
-    }, {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}},
+    }, {headers: {'Authorization': localStorage.getItem('auth')}},
     ) .then(res =>{
         this.props.history.push(`/courses`)
       }).catch(err =>{
