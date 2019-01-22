@@ -71,9 +71,6 @@ class App extends Component {
                 validUser:true
 
             });
-            
-            //when signed in, brings user back to the page they
-            history.goBack('/');
         }
         //when a user is not in the user database, state is changed to false and they do not log in
         }) .catch(err => {
@@ -130,7 +127,7 @@ class App extends Component {
                         <Route exact path='/signup' component={UserSignUp} />
                         <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
-                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={this.state.user}/>                       
+                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={user}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>

@@ -8,12 +8,16 @@ class CreateCourse extends Component {
     super();
     this.state = {
         user:"",
+        title:"",
+        description:"",
+        estimatedTime:"",
+        materialsNeeded:"",
         isLoaded: false,
         signedIn: false
     }
 
   }
-   //method for a PUT request to update all of the changes that are made
+   //method for a POST request to update all of the changes that are made
    createCourse = (title, description, estimatedTime,materialsNeeded) => {
     axios.post(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
       data:{
@@ -80,7 +84,8 @@ class CreateCourse extends Component {
                 </ul>
               </div>
             </div>
-            <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button><button className="button button-secondary">Cancel</button></div>
+            <div className="grid-100 pad-bottom"><button className="button" type="submit">Create Course</button>
+            <Link to="/courses"><button className="button button-secondary">Cancel</button></Link></div>
           </form>
         </div>
       </div>

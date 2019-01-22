@@ -12,6 +12,7 @@
          title:"",
          id:"",
          user:"",
+         userId:"",
          estimatedTime:"",
          isLoaded: false,
          signedIn: false
@@ -26,7 +27,8 @@
                  courses: res.data,
                  description:res.data.description,
                  materialsNeeded:res.data.materialsNeeded,
-                 estimatedTime:res.data.estimatedTime
+                 estimatedTime:res.data.estimatedTime,
+                 userId: res.data.user.id
              })
           }) .catch(err =>{
             console.log(err);
@@ -34,18 +36,13 @@
   }
  
   //method for a PUT request to update all of the changes that are made
-  updateCourse = (title, description, estimatedTime,materialsNeeded) => {
+  updateCourse = (title, description, estimatedTime,materialsNeeded, id) => {
     axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
-      data:{
         title:title,
         description:description,
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
-      }
-    }, {auth: {
-      username: localStorage.getItem('emailAddress'),
-      password: localStorage.getItem('password')
-   }},
+    }, {headers: {'Authorization': JSON.parse(window.localStorage.getItem('auth'))}},
     ) .then(res =>{
         this.props.history.push(`/courses`)
       }).catch(err =>{
