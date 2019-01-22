@@ -59,12 +59,12 @@ class App extends Component {
             
             //sets the state for the user when signed in
             this.setState({
-                user:response.data,
+                user:{
                 id,
                 firstName,
                 lastName,
                 emailAddress,
-                password,
+                password},
                 signedIn:true,
                 isAuthenticated:true,
                 currUser:true,
