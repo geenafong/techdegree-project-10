@@ -36,16 +36,29 @@
   }
  
   //method for a PUT request to update all of the changes that are made
-  updateCourse = (title, description, estimatedTime,materialsNeeded, id) => {
+  updateCourse = event => {
+      event.preventDefault();
+      const {
+        title,
+        description,
+        estimatedTime,
+        materialsNeeded,
+        user
+      } = this.state;
     axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
+      auth: {
+        username: this.state.user.emailAddress,
+        password: this.state.user.password
+     },   
+     data:{
         title:title,
         description:description,
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
-    }, {headers: {'Authorization': localStorage.getItem('emailAddress' && 'password'), 
-  }},
-    ).then(res =>{
-        this.props.history.push(`/courses`)
+        user:user
+        }  
+  }).then(res =>{
+          this.props.history.push(`/courses`);
       }).catch(err =>{
         console.log(err);
       }) 
@@ -56,7 +69,6 @@
     }
   
     handleSubmit = e => {
-      e.preventDefault();
       this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
     }
 
@@ -82,7 +94,7 @@
                  <ul className="course--stats--list">
                    <li className="course--stats--list--item">
                      <h4>Estimated Time</h4>
-                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} defaultValue={this.state.estimatedTime} /></div>
+                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} value={this.state.estimatedTime} /></div>
                    </li>
                    <li className="course--stats--list--item">
                      <h4>Materials Needed</h4>
