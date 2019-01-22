@@ -27,7 +27,6 @@ class App extends Component {
         courses: [],
         currentUser:false,
         signedIn:false,
-        currentUser: false,
         currUser: false,
         isAuthenticated:false
     }
@@ -38,10 +37,8 @@ class App extends Component {
         auth: {
             username: emailAddress, 
             password: password
-        },
-        
-    })
-    .then(response => {
+        }
+    }).then(response => {
         //enters users info into a local database to be used for authentication
         if(response.status === 200 || response.status ===304) {
             
@@ -74,7 +71,7 @@ class App extends Component {
             });
         }
         //when a user is not in the user database, state is changed to false and they do not log in
-        }) .catch(err => {
+        }).catch(err => {
                 if(err) {
                     this.setState({
                         signedIn:false,

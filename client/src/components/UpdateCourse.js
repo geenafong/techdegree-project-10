@@ -30,7 +30,7 @@
                  estimatedTime:res.data.estimatedTime,
                  userId: res.data.user.id
              })
-          }) .catch(err =>{
+          }).catch(err =>{
             console.log(err);
           }) 
   }
@@ -44,7 +44,7 @@
         materialsNeeded:materialsNeeded,
     }, {headers: {'Authorization': localStorage.getItem('emailAddress' && 'password'), 
   }},
-    ) .then(res =>{
+    ).then(res =>{
         this.props.history.push(`/courses`)
       }).catch(err =>{
         console.log(err);
@@ -61,7 +61,6 @@
     }
 
  render() {
-   
      return (
        <div className="bounds course--detail">
          <h1>Update Course</h1>

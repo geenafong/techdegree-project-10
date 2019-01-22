@@ -15,7 +15,6 @@ class CreateCourse extends Component {
         isLoaded: false,
         signedIn: false
     }
-
   }
    //method for a POST request to update all of the changes that are made
    createCourse = (title, description, estimatedTime,materialsNeeded) => {
@@ -26,11 +25,11 @@ class CreateCourse extends Component {
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
       }
-    }, {auth: {
-      username: localStorage.getItem('emailAddress'),
-      password: localStorage.getItem('password')
-   }},
-    ) .then(res =>{
+    }, {headers: {
+      'Authorization': localStorage.getItem('emailAddress' && 'password')
+    }
+   },
+    ).then(res =>{
         this.props.history.push(`/courses`)
       }).catch(err =>{
         console.log(err);
