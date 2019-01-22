@@ -1,73 +1,109 @@
-import React from 'react';
-import {Link} from 'react-router-dom';
-import axios from 'axios';
+import React, { Component } from 'react';
+import {Link} from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
+import axios from 'axios'
 
-//This component provides the "Sign Up" screen by rendering a form that allows a user to sign up by creating a new account
-class UserSignUp extends React.Component {
-    state = {
-        firstName:"",
-        lastName:"",
-        emailAddress: "",
-        password: "",
-        confirmPassword:"",
-        signedIn: false,
-        validationError:false
+class SignUp extends Component {
+  constructor () {
+    super()
+    this.state = {
+      firstName:"",
+      lastName:"",
+      user:"",
+      password:"",
+      confirmPass:"",
+      validation: "",
+      error:"",
+    }
+  }
 
-    }
 
-    signUp = (firstName, lastName, emailAddress, password) => {
-        axios.post('http://localhost:5000/api/users', {
-          firstName: firstName,
-          lastName: lastName,
-          emailAddress: emailAddress,
-          password: password
-        }) .then(response => {
-            if (response.status === 201) {
-              this.setState({validationError: false})
-              this.props.signIn(emailAddress, password)
-            }
-          }).catch (error => {
-            if (error.response.status === 400) {
-              this.setState({validationError: true});
-            } else if (error.response.status === 500) {
-              this.props.history.push('/error');
-            }
-          })
+signUp = (firstName, lastName, user, password) => {
+  axios.post('http://localhost:5000/api/users', {
+    firstName: firstName,
+    lastName: lastName,
+    emailAddress: user,
+    password: password
+  })
+  .then(response => {
+    if (response.status === 201){
+      this.setState({
+        validation: false,
+        error:""
+      })
+      this.props.logIn(user, password)
     }
-    //event handlers to change the state when the value of each changes
-    handleChange = e => {
-        this.setState({[e.target.id]: e.target.value});
+  })
+  .then (response => {
+    this.props.history.goBack()
+  })
+  .catch (error => {
+  if (error.response.status === 400) {
+    if (error.response.data.message !== "") {
+    this.setState({
+      error: error.response.data.message
+    })
     }
-
-    handleSubmit = e => {
-        e.preventDefault();
-        this.signUp(this.state.emailAddress, this.state.password, this.state.firstName, this.state.lastName)
-    }
-     
-    render() {
-        return (
-          <React.Fragment>
-            <div className="bounds">
-                <div className="grid-33 centered signin">
-                <h1>Sign Up</h1>
-                    <form onSubmit={this.handleSubmit}>
-                        <div><input ref={(input) => this.firstName = input} onChange={this.firstNameEntered} id="firstName" name="firstName" type="text" className="" placeholder="First Name"/></div>                        
-                        <div><input ref={(input) => this.lastName = input} onChange={this.handleChange} id="lastName" name="lastName" type="text" className="" placeholder="Last Name" /> </div>
-                        <div><input ref={(input) => this.emailAddress = input} onChange={this.handleChange} id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address" /> </div>
-                        <div><input ref={(input) => this.password = input} onChange={this.handleChange} id="password" name="password" type="password" className="" placeholder="Password" /> </div>
-                        <div><input ref={(input) => this.confirmPassword = input} onChange={this.handleChange} id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password" /> </div>
-                        <div className="grid-100 pad-bottom">
-                        <Link to={"/"}><button className="button" type="submit">Sign Up</button></Link>
-                        <Link to={"/"}><button className="button button-secondary" onClick={this.cancel}>Cancel</button></Link>
-                        </div>
-                    </form>
-                </div>
-                <p>&nbsp;</p>
-                <p>Already have a user account? <Link to="/signin">Click here</Link> to sign in!</p>
-            </div>
-          </React.Fragment>
-        );
-    }
+  }
+})
 }
 
-export default UserSignUp;
+
+First = e => { this.setState({ firstName: e.target.value }) }
+Last = e => { this.setState({ lastName: e.target.value }) }
+User = e => { this.setState({ user: e.target.value }) }
+Pass = e => { this.setState({ password: e.target.value }) }
+
+PassConfirm = e => { this.setState({
+  confirmPass: e.target.value
+})
+
+}
+
+handleSubmit = e => {
+  e.preventDefault()
+  if (this.state.password  === this.state.confirmPass) {
+    this.signUp(this.state.firstName, this.state.lastName, this.state.user, this.state.password)
+  }
+}
+
+
+// where validation.js gets the props to use to validate the info provided, and display error messages for the user based
+// on those errors.
+  render() {
+    
+          return (
+              <div className="bounds">
+             
+              <div className="grid-33 centered signin">
+                <h1>Sign Up</h1>
+                <div>
+                  <form onSubmit={this.handleSubmit}>
+                    <div>
+                    <input id="firstName" name="firstName" type="text" className="" placeholder="First Name"  onBlur={this.First} />
+                            </div>
+                    <div>
+                    <input id="lastName" name="lastName" type="text" className="" placeholder="Last Name" onBlur={this.Last}  />
+                            </div>
+                    <div>
+                    <input id="emailAddress" name="emailAddress" type="text" className="" placeholder="Email Address"  onBlur={this.User}  />
+                      </div>
+                    <div>
+                    <input id="password" name="password" type="password" className="" placeholder="Password" onBlur={this.Pass}  />
+                            </div>
+                    <div id="confirmPasswordDiv">
+                    <input id="confirmPassword" name="confirmPassword" type="password" className="" placeholder="Confirm Password"  onBlur={this.PassConfirm} />
+                             </div>
+
+                    <div className="grid-100 pad-bottom" ><button className="button" type="submit">Sign Up</button><Link to="/"><button className="button button-secondary">Cancel</button></Link></div>
+                  </form>
+                </div>
+                <p>&nbsp;</p>
+                <p>Already have a user account? <Link to="/userSignIn">Click here</Link> to sign in!</p>
+              </div>
+            </div>
+          );
+      }
+}
+//withRouter needed when using props.history.push/goBack
+export default withRouter(SignUp)

@@ -42,7 +42,8 @@
         description:description,
         estimatedTime:estimatedTime,
         materialsNeeded:materialsNeeded,
-    }, {headers: {'Authorization': localStorage.getItem('auth')}},
+    }, {headers: {'Authorization': localStorage.getItem('emailAddress' && 'password'), 
+  }},
     ) .then(res =>{
         this.props.history.push(`/courses`)
       }).catch(err =>{

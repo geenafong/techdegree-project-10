@@ -45,6 +45,7 @@ class App extends Component {
         //enters users info into a local database to be used for authentication
         if(response.status === 200 || response.status ===304) {
             
+            // from: https://www.robinwieruch.de/local-storage-react/
             localStorage.setItem('id', response.data._id);
             localStorage.setItem('firstName', response.data.firstName);
             localStorage.setItem('lastName', response.data.lastName);

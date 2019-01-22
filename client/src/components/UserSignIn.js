@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import { Consumer } from './Context'
 import {withRouter} from 'react-router';
 
 //This component provides the "Sign In" screen by rendering a form that allows a user to sign using their existing account information. 
-class UserSignIn extends React.Component {
+class UserSignIn extends Component {
     constructor(){
         super()
         this.state = {
