@@ -30,7 +30,7 @@ class UserSignIn extends Component {
             <Consumer>
               {context => {
                 if (context.signedIn){
-                    this.props.history.push('/courses')
+                   this.props.history.goBack();
                 }
             return(
             <div className="bounds">
