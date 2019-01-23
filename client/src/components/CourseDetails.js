@@ -31,10 +31,12 @@ class CourseDetails extends React.Component {
     };
 
     deleteCourse = () => {
-         axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
-    }
+         axios.delete(`http://localhost:5000/api/courses/${this.props.id}`, 
+         {headers: {'Authorization': localStorage.getItem('auth')}}
+         )}
     
   render(){
+   
    return (
     <div>
     <div className="actions--bar">

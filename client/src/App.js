@@ -48,21 +48,25 @@ class App extends Component {
             localStorage.setItem('lastName', response.data.lastName);
             localStorage.setItem('emailAddress', response.data.emailAddress);
             localStorage.setItem('password', response.data.password);
+            localStorage.setItem('login', response.config.headers.Authorization);
+            sessionStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
             
             let id = localStorage.getItem('id');
             let firstName = localStorage.getItem('firstName');
             let lastName = localStorage.getItem('lastName');
             let emailAddress = localStorage.getItem('emailAddress');
             let password = localStorage.getItem('password');
+            let login = localStorage.getItem('login', response.config.headers.Authorization);
             
             //sets the state for the user when signed in
             this.setState({
                 user:{
                 id,
+                login,
                 firstName,
                 lastName,
                 emailAddress,
-                password},
+                password,},
                 signedIn:true,
                 isAuthenticated:true,
                 currUser:true,
@@ -124,7 +128,7 @@ class App extends Component {
                         <Route exact path="/courses" render={ () => <Courses />}/>
                         <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />}/>    
                         <Route exact path='/signup' component={UserSignUp} />
-                        <Route exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
+                        <PrivateRoute exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
                         <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={user} updateCourse= {this.updateCourse}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
