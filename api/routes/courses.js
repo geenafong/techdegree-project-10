@@ -7,32 +7,17 @@ const User = require("../models").User;
 
 const auth = require("basic-auth");
 const bcrypt = require('bcryptjs');
+
 // GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
 router.get("/courses", function (req, res, next) {
     Course.find({}) 
              .populate("user", "firstName lastName")
-             .select({ 'title': 1, 'description': 1 })
              .exec(function(err, courses){
                 if(err) return next(err);
                 res.status(200);
                 res.json(courses);
     });  
 });
-
-//To check for IDs
-router.param("id", function(req,res,next,id){
-    Course.findById(id, function(err, doc){
-        if(err) return next(err);
-        if(!doc) {
-            err = new Error("Not Found");
-            err.status = 404;
-            return next(err);
-        }
-        req.course = doc;
-        return next();
-    });
-});
-
 
 // GET /api/courses/:id 200 - Returns a the course (including the user that owns the course) for the provided course ID
 router.get("/courses/:id", function(req, res) {
@@ -69,14 +54,34 @@ router.use(function(req, res, next){
     }
 });
 
+// GET /api/users 200 - Returns the currently authenticated user
+router.get("/users", function (req, res, next) {
+    User.find({}) 
+       .exec(function(err, user){
+           if(err) return next(err);
+            res.json(req.user);
+       });
+});
 
-
+//To check for IDs
+router.param("id", function(req,res,next,id){
+    Course.findById(id, function(err, doc){
+        if(err) return next(err);
+        if(!doc) {
+            err = new Error("Not Found");
+            err.status = 404;
+            return next(err);
+        }
+        req.course = doc;
+        return next();
+    });
+});
 
 // POST /api/courses 201 - Creates a course, sets the Location header to the URI for the course, and returns no content
 router.post("/courses", function (req, res, next) {
     if(req.user){
         if(req.body.description && req.body.title) {
-            const newCourse = new Course({ ...req.body, user: req.user._id });
+            const newCourse = new Course(req.body);
             Course.create(newCourse, function(err, course){
                 if(err) return next(err);
                 res.location('/');
