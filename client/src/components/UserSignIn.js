@@ -21,7 +21,7 @@ class UserSignIn extends Component {
     //a event handler that calls the signIn method from the global state to check authentication
     handleSubmit = e => {
         e.preventDefault();
-        this.props.signIn(this.props.history, this.state.emailAddress, this.state.password)
+        this.props.signIn(this.state.emailAddress, this.state.password)
     }
      
     render() {

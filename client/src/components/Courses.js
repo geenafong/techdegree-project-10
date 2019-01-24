@@ -19,13 +19,13 @@ class Courses extends React.Component {
       this.setState({
         isLoaded: true,
         courses: res.data
-      })
+      }) 
     })
      .catch(err => console.log('Unable to fetch data',err))
   };
  
   render() {
-    let courses = [];
+    let courses;
       courses = this.state.courses.map((course, index) => (
         <div className="grid-33" key={index}>
           <Link className="course--module course--link" to={`/courses/${course._id}`}>Courses here
@@ -33,6 +33,7 @@ class Courses extends React.Component {
             <h3 className="course--title">{course.title}</h3>
             </Link>
         </div>
+        
       ));
   
         return (

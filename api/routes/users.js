@@ -34,31 +34,38 @@ router.post("/users", function (req, res, next) {
 });
 
 // A middleware function that attempts to get the user credentials from the Authorization header set on the request
-// router.use(function(req, res, next){
-//     if(auth(req)){
-//         User.findOne({emailAddress: auth(req).name})
-//           .exec(function(err, user){
-//             if(user){
-//                 bcrypt.compare(auth(req).pass, user.password, function(err,res){
-//                     if (res){
-//                         req.user = user;
-//                         next();
-//                     } else {
-//                         const err = new Error("You are not authorized.")
-//                         err.status = 401;
-//                         return next(err);
-//                     }
-//                 });
-//             } else {
-//                 const err = new Error("You are not logged in. Please try again.")
-//                 err.status = 401;
-//                 return next(err);
-//             }
-//         })
-//     }
-// });
+router.use(function(req, res, next){
+    if(auth(req)){
+        User.findOne({emailAddress: auth(req).name})
+          .exec(function(err, user){
+            if(user){
+                bcrypt.compare(auth(req).pass, user.password, function(err,res){
+                    if (res){
+                        req.user = user;
+                        next();
+                    } else {
+                        const err = new Error("You are not authorized.")
+                        err.status = 401;
+                        return next(err);
+                    }
+                });
+            } else {
+                const err = new Error("You are not logged in. Please try again.")
+                err.status = 401;
+                return next(err);
+            }
+        })
+    }
+});
 
-
+// GET /api/users 200 - Returns the currently authenticated user
+router.get("/users", function (req, res, next) {
+    User.find({}) 
+       .exec(function(err, user){
+           if(err) return next(err);
+            res.json(req.user);
+       });
+});
 
 
 module.exports = router;

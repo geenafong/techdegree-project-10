@@ -20,7 +20,9 @@ import PrivateRoute from './components/PrivateRoute';
 
 class App extends Component {
     //establishes the state of the component when no one is signed in
-    state= {
+    constructor(){
+    super();
+    this.state= {
         user:'',
         password:'',
         emailAddress:'',
@@ -30,9 +32,10 @@ class App extends Component {
         currUser: false,
         isAuthenticated:false
     }
+    }
     
     //creates a method called signIn that gets the user's credentials and stores it in a local database that is used to check for authorization
-    signIn = (history, emailAddress, password) => {
+    signIn = (emailAddress, password) => {
      axios.get('http://localhost:5000/api/users', {
         auth: {
             username: emailAddress, 
@@ -40,12 +43,7 @@ class App extends Component {
         }
     }).then(response => {
         //enters users info into a local database to be used for authentication
-        if(response.status === 200 || response.status ===304) {
-            
-            // from: https://www.robinwieruch.de/local-storage-react/
-            localStorage.setItem("user", JSON.stringify(response.data))
-            localStorage.setItem("login", JSON.stringify(response.config.headers.Authorization))
-                        
+        if(response.status === 200 || response.status ===304) {           
             //sets the state for the user when signed in
             this.setState({
                 user: response.data,
@@ -53,8 +51,10 @@ class App extends Component {
                 isAuthenticated:true,
                 currUser:true,
                 validUser:true
-
             });
+            // from: https://www.robinwieruch.de/local-storage-react/
+            localStorage.setItem("user", JSON.stringify(response.data))
+
         } 
         //when a user is not in the user database, state is changed to false and they do not log in
         }).catch(err => {
@@ -77,23 +77,15 @@ class App extends Component {
       }
       componentDidMount() {
         if(localStorage.user){
-          let user = JSON.parse(localStorage.getItem('user'))
-          this.signIn(this.props.history, user.emailAddress, user.password)
+          let user = JSON.parse(window.localStorage.getItem('user'))
+          this.signIn(user.emailAddress, user.password)
         }
     }
     render() {
-            let id = localStorage.getItem('id');
-            let firstName = localStorage.getItem('firstName');
-            let lastName = localStorage.getItem('lastName');
-            let emailAddress = localStorage.getItem('emailAddress');
-            let password = localStorage.getItem('password');
-            let user = { id, firstName,lastName, emailAddress, password }
         return(
             //the authenticated user and the user sign in and sign out methods are defined using a Context API <Provider> component
              <Provider value={{
                     user:this.state.user,
-                    firstName:this.state.firstName,
-                    password:this.state.password,
                     isAuthenticated:this.state.isAuthenticated,
                     signedIn:this.state.signedIn,
                   actions: {
@@ -110,9 +102,9 @@ class App extends Component {
                         <Route exact path="/courses" render={ () => <Courses />}/>
                         <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />}/>    
                         <Route exact path='/signup' component={UserSignUp} />
-                        <PrivateRoute exact path='/courses/create' render= {() => <CreateCourse user={user}/>}/>
+                        <PrivateRoute exact path='/courses/create' render= {() => <CreateCourse />}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
-                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} user={user} updateCourse= {this.updateCourse}/>                       
+                        <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} updateCourse= {this.updateCourse}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />
                     </Switch>
                     </div>
