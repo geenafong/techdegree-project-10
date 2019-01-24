@@ -43,37 +43,19 @@ class App extends Component {
         if(response.status === 200 || response.status ===304) {
             
             // from: https://www.robinwieruch.de/local-storage-react/
-            localStorage.setItem('id', response.data._id);
-            localStorage.setItem('firstName', response.data.firstName);
-            localStorage.setItem('lastName', response.data.lastName);
-            localStorage.setItem('emailAddress', response.data.emailAddress);
-            localStorage.setItem('password', response.data.password);
-            localStorage.setItem('login', response.config.headers.Authorization);
-            sessionStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
-            
-            let id = localStorage.getItem('id');
-            let firstName = localStorage.getItem('firstName');
-            let lastName = localStorage.getItem('lastName');
-            let emailAddress = localStorage.getItem('emailAddress');
-            let password = localStorage.getItem('password');
-            let login = localStorage.getItem('login', response.config.headers.Authorization);
-            
+            localStorage.setItem("user", JSON.stringify(response.data))
+            localStorage.setItem("login", JSON.stringify(response.config.headers.Authorization))
+                        
             //sets the state for the user when signed in
             this.setState({
-                user:{
-                id,
-                login,
-                firstName,
-                lastName,
-                emailAddress,
-                password,},
+                user: response.data,
                 signedIn:true,
                 isAuthenticated:true,
                 currUser:true,
                 validUser:true
 
             });
-        }
+        } 
         //when a user is not in the user database, state is changed to false and they do not log in
         }).catch(err => {
                 if(err) {
@@ -96,7 +78,7 @@ class App extends Component {
       componentDidMount() {
         if(localStorage.user){
           let user = JSON.parse(localStorage.getItem('user'))
-          this.signIn(user.emailAddress, user.password)
+          this.signIn(this.props.history, user.emailAddress, user.password)
         }
     }
     render() {
