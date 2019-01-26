@@ -3,10 +3,13 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
-const courses = require("./routes/courses");
-const users = require("./routes/users");
+const routes = require("./routes/routes");
 const mongoose = require("mongoose");
 const jsonParser = require('body-parser').json;
+const cors = require('cors');
+
+// variable to enable global error logging
+const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
 
 // create the Express app
 const app = express();
@@ -26,6 +29,7 @@ app.use(function(req, res, next) {
 //configure mongoose
 mongoose.connect("mongodb://localhost:27017/fsjstd-restapi");
 const db = mongoose.connection;
+app.use(cors())
 
 // message to the console if there's an error connecting to the database.
 db.on("error", function(err){
@@ -37,9 +41,6 @@ db.once("open", function(){
     console.log("db connection successful");
 });
 
-// variable to enable global error logging
-const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
-
 
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
@@ -48,8 +49,7 @@ app.use(morgan('dev'));
 app.use(jsonParser());
 
 // api routes 
-app.use("/api", users);
-app.use("/api", courses);
+app.use("/api", routes);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {

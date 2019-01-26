@@ -26,9 +26,12 @@
                  isLoaded: true,
                  courses: res.data,
                  description:res.data.description,
+                 title:res.data.title,
                  materialsNeeded:res.data.materialsNeeded,
                  estimatedTime:res.data.estimatedTime,
-                 userId: res.data.user.id
+                 userId: res.data.user._id,
+                 firstName:res.data.firstName,
+                 lastName:res.data.lastName
              })
           }).catch(err =>{
             console.log(err);
@@ -36,25 +39,16 @@
   }
  
   //method for a PUT request to update all of the changes that are made
-  updateCourse = () => {
-      const {
-        title,
-        description,
-        estimatedTime,
-        materialsNeeded,
-        user
-      } = this.state;
+  updateCourse = (title, description, estimatedTime,materialsNeeded,) => {
     axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
-      auth: {
-        username: this.state.user.emailAddress,
-        password: this.state.user.password
-     },   
-     data:{
-        title:title,
-        description:description,
-        estimatedTime:estimatedTime,
-        materialsNeeded:materialsNeeded,
-        user:user
+      title:title,
+      description: description,
+      estimatedTime: estimatedTime,
+      materialsNeeded: materialsNeeded,
+         
+     }, {  
+     headers:{
+      'Authorization': JSON.parse(window.localStorage.getItem('auth'))
         }  
   }).then(res =>{
           this.props.history.push(`/courses`);
@@ -62,7 +56,6 @@
         console.log(err);
       }) 
     }
-  
     handleChange = e => {
       this.setState({[e.target.id]: e.target.value});
     }
@@ -81,10 +74,8 @@
              <div className="grid-66">
                <div className="course--header">
                  <h4 className="course--label">Course</h4>
-                 <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..."
-                     defaultValue={this.state.courses.title}></input></div>
-                 <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>
-               </div>
+                 <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleChange} value={this.state.title}></input></div>
+                 <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>               </div>
                <div className="course--description">
                <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.description}></textarea></div>
                </div>

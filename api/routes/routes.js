@@ -6,7 +6,7 @@ const Course = require("../models").Course;
 const User = require("../models").User;
 
 const auth = require("basic-auth");
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 // GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
 router.get("/courses", function (req, res, next) {
@@ -70,7 +70,14 @@ router.use(function(req, res, next){
     }
 });
 
-
+// GET /api/users 200 - Returns the currently authenticated user
+router.get("/users", function (req, res, next) {
+    User.find({}) 
+       .exec(function(err, user){
+           if(err) return next(err);
+            res.json(req.user);
+       });
+});
 
 //To check for IDs
 router.param("id", function(req,res,next,id){
@@ -106,7 +113,7 @@ router.post("/courses", function (req, res, next) {
 // PUT /api/courses/:id 204 - Updates a course and returns no content
 router.put("/courses/:id", function (req, res, next) {
     if (req.course.user.toString() === req.user._id.toString()){
-        req.course.updateOne(req.body, { upsert: true, runValidators: true }, function(err, result){
+        req.course.update(req.body, { upsert: true, runValidators: true }, function(err, result){
             if(err) return next(err);
             return res.sendStatus(204);
         });

@@ -54,6 +54,7 @@ class App extends Component {
             });
             // from: https://www.robinwieruch.de/local-storage-react/
             localStorage.setItem("user", JSON.stringify(response.data))
+            localStorage.setItem("auth", JSON.stringify(response.config.headers.Authorization))
 
         } 
         //when a user is not in the user database, state is changed to false and they do not log in

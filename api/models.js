@@ -37,8 +37,8 @@ const CourseSchema = new Schema({
         type: String,
         required: [true, 'Description is required']
     },    
-    estimatedTime: String,
-    materialsNeeded: String
+    estimatedTime: String || '',
+    materialsNeeded: String || ''
 })
 
 //To check the password
