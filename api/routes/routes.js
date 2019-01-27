@@ -21,18 +21,32 @@ router.get("/courses", function (req, res, next) {
 
   // POST /api/users 201 - Creates a user, sets the Location header to "/", and returns no content
   router.post("/users", function (req, res, next) {
-    if(req.body.emailAddress && /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(req.body.emailAddress)){
         const newUser = new User(req.body);
-        User.create(newUser, function(err){
-            if(err) return next(err);
-            res.location('/');
-            res.sendStatus(201);
-        }); 
-    }else{
-        const err = new Error("Please enter a valid email address.");
-        err.status = 400;
-        return next(err); 
-}
+        newUser.validate(function(err, req, res) {
+          if (err.name && err === 'ValidationError'){
+                err.status = 400;
+                err.message = err.errors;
+                return next(err)  
+          };
+        User.find({emailAddress:req.body.emailAddress}, function(err, users){
+            if(users.length !==0){
+                const err = new Error("This email address is already in use");
+                err.status = 400;
+                next(err); 
+            } else if(!/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(req.body.emailAddress)){
+                const err = new Error("Please enter a valid email address")
+                err.status = 400
+                next(err)
+            }
+            else{
+                newUser.save(function(err, user){
+                    if(err) {return next(err)};
+                    res.location('/');
+                    res.sendStatus(201);
+                }) 
+            }      
+        });
+        })
 });
 
 // GET /api/courses/:id 200 - Returns a the course (including the user that owns the course) for the provided course ID
@@ -96,19 +110,17 @@ router.param("id", function(req,res,next,id){
 // POST /api/courses 201 - Creates a course, sets the Location header to the URI for the course, and returns no content
 router.post("/courses", function (req, res, next) {
     if(req.user){
-        if(req.body.description && req.body.title) {
-            const newCourse = new Course(req.body);
-            Course.create(newCourse, function(err, course){
-                if(err) return next(err);
-                res.location('/');
-                res.sendStatus(201);
-            });
-        } else {
+        const newCourse = new Course({...req.body, user: req.user._id});
+        newCourse.save(function(err, newCourse) {
+            if (err) return next(err)
+            res.locals.id = newCourse._id
+            res.status(201).send({ id: newCourse._id })
+        })
+     } else if (err.errors.title || err.errors.description || err && err.name === 'ValidationError') {
             const err = new Error("You must enter a title and description");
             err.status = 400;
             return next(err);
         }
-    };
 });
 // PUT /api/courses/:id 204 - Updates a course and returns no content
 router.put("/courses/:id", function (req, res, next) {

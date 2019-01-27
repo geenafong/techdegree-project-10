@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
+import { Consumer } from './Context'
 
 //This component provides the "Course Detail" screen by retrieving the detail for a course from the REST API's /api/courses/:id route and rendering the course. 
 class CourseDetails extends React.Component {    
@@ -20,29 +21,62 @@ class CourseDetails extends React.Component {
     }
     //Gets courses based off of their id
     componentDidMount() {
-        axios.get(`http://localhost:5000/api/courses/${this.props.id}`)
-            .then(res => {
-                this.setState({
-                    isLoaded: true,
-                    courses: res.data,
-                    isAuthenticated:true
-                })
-            });
-    };
+      axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
+          .then(res => {
+              this.setState({
+                  isLoaded: true,
+                  courses: res.data,
+                  userId: res.data.user._id,                  
+                  description:res.data.description,
+                  title:res.data.title,
+                  materialsNeeded:res.data.materialsNeeded,
+                  estimatedTime:res.data.estimatedTime,
+                  firstName:res.data.firstName,
+                  lastName:res.data.lastName
+              })
+           }).catch(err =>{
+             console.log(err);
+           }) 
+   }
 
-    deleteCourse = () => {
-         axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
-    }
+    deleteCourse = (id) => {
+      axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{  
+       headers:{
+        'Authorization': JSON.parse(window.localStorage.getItem('auth'))
+          }  
+    }).then(res =>{
+            this.props.history.push(`/courses`);
+        }).catch(err =>{
+          console.log(err);
+        }) 
+      }    
+      handleChange = e => {
+        this.setState({[e.target.id]: e.target.value});
+      }
     
+      handleSubmit = e => {
+        e.preventDefault();
+        this.deleteCourse(this.props.id);
+         }
+
   render(){
    return (
+     <Consumer>
+     {context => {
+       let deleteButton = '';
+       let updateButton = '';
+       if (this.state.userId === context.user._id){
+          updateButton = <Link className="button" to={`/courses/${this.props.id}/update`}>Update Course</Link>
+          deleteButton =  <button className="button" onClick={this.handleSubmit}>Delete Course</button>
+       }
+    return(
     <div>
     <div className="actions--bar">
       <div className="bounds">
         <div className="grid-100">
           <span>
-            <Link className="button" to={`/courses/${this.props.id}/update`}>Update Course</Link>
-            <button className="button" onClick={this.deleteCourse}>Delete Course</button>
+            {updateButton}
+            {deleteButton}
           </span>
           <Link className="button button-secondary" to="/">Return to List</Link>
         </div>
@@ -80,8 +114,11 @@ class CourseDetails extends React.Component {
           </div>
          </div>
         </div>
+        )
+       }}
+     </Consumer>
     );
   }
 }
 
-export default CourseDetails;
+export default withRouter(CourseDetails);

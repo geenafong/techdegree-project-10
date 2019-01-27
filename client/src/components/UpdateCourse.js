@@ -29,7 +29,7 @@
                  title:res.data.title,
                  materialsNeeded:res.data.materialsNeeded,
                  estimatedTime:res.data.estimatedTime,
-                 userId: res.data.user._id,
+                 id: res.data._id,
                  firstName:res.data.firstName,
                  lastName:res.data.lastName
              })
@@ -39,8 +39,8 @@
   }
  
   //method for a PUT request to update all of the changes that are made
-  updateCourse = (title, description, estimatedTime,materialsNeeded,) => {
-    axios.put(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{
+  updateCourse = (title, description, estimatedTime,materialsNeeded, id) => {
+    axios.put(`http://localhost:5000/api/courses/${id}`,{
       title:title,
       description: description,
       estimatedTime: estimatedTime,
@@ -62,7 +62,7 @@
   
     handleSubmit = e => {
       e.preventDefault();
-      this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
+      this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded, this.state.id)
     }
 
  render() {

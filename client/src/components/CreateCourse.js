@@ -13,11 +13,12 @@ class CreateCourse extends Component {
         estimatedTime:"",
         materialsNeeded:"",
         isLoaded: false,
-        signedIn: false
+        signedIn: false,
+        id:""
     }
   }
    //method for a POST request to update all of the changes that are made
-   createCourse = (title, description, estimatedTime,materialsNeeded) => {
+   createCourse = (id, title, description, estimatedTime,materialsNeeded) => {
     axios.post(`http://localhost:5000/api/courses/`,{
       title:title,
       description: description,
@@ -40,13 +41,13 @@ class CreateCourse extends Component {
   
     handleSubmit = e => {
       e.preventDefault();
-      this.createCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
+      this.createCourse(this.state.id, this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
     }
   render() {
     //checks to see if there is a valid title/description
       let titleError = '';
       let descError = '';
-            
+
         if(this.state.title.length === 0){
           titleError = <li>Please provide a value for "Title"</li>
         } 
