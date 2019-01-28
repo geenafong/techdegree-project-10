@@ -12,6 +12,10 @@ class CreateCourse extends Component {
         description:"",
         estimatedTime:"",
         materialsNeeded:"",
+        validationError:false,
+        titleError: "",
+        descriptionError: "",
+        err:"",
         isLoaded: false,
         signedIn: false,
         id:""
@@ -32,9 +36,19 @@ class CreateCourse extends Component {
   }).then(res =>{
           this.props.history.push(`/courses`);
       }).catch(err =>{
-        console.log(err);
-      }) 
-    }
+        if (err.res.status === 400) {
+          this.setState({validationError: true, validationMessage: "Validation Error"});
+          if (err.res.data.message === "Please enter a title") {
+            this.setState({titleError: "Please enter a title"})
+          }
+          if (err.res.data.message === "Please enter a description") {
+            this.setState({descriptionError: "Please enter a description"})
+          }
+        } else if (err.res.status === 500) {
+          console.log(err);
+        }
+      });
+    };
     handleChange = e => {
       this.setState({[e.target.id]: e.target.value});
     }
@@ -44,27 +58,16 @@ class CreateCourse extends Component {
       this.createCourse(this.state.id, this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded)
     }
   render() {
-    //checks to see if there is a valid title/description
-      let titleError = '';
-      let descError = '';
-
-        if(this.state.title.length === 0){
-          titleError = <li>Please provide a value for "Title"</li>
-        } 
-        if(this.state.description.length === 0){
-          descError = <li>Please provide a value for "Description"</li>
-        } 
-        
     return (
         <div className="bounds course--detail">
          <h1>Create Course</h1>
          <div>
           <div>
-            <h2 className="validation--errors--label">Validation errors</h2>
+            <h2 className="validation--errors--label">{this.state.validationMessage}</h2>
             <div className="validation-errors">
               <ul>
-                {titleError}
-                {descError}
+                <li>{this.state.titleError}</li>
+                <li>{this.state.descriptionError}</li>
               </ul>
             </div>
           </div>
@@ -72,10 +75,10 @@ class CreateCourse extends Component {
             <div className="grid-66">
               <div className="course--header">
                 <h4 className="course--label">Course</h4>
-                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onBlur={this.handleChange}></input></div>
+                <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleChange}></input></div>
               </div>
               <div className="course--description">
-                <div><textarea id="description" name="description" className="" placeholder="Course description..." onBlur={this.handleChange}></textarea></div>
+                <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange}></textarea></div>
               </div>
             </div>
             <div className="grid-25 grid-right">
@@ -84,11 +87,11 @@ class CreateCourse extends Component {
                   <li className="course--stats--list--item">
                     <h4>Estimated Time</h4>
                     <div> <input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input"
-                        placeholder="Hours" onBlur={this.handleChange}></input></div>
+                        placeholder="Hours" onChange={this.handleChange}></input></div>
                   </li>
                   <li className="course--stats--list--item">
                     <h4>Materials Needed</h4>
-                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." onBlur={this.handleChange}></textarea></div>
+                    <div><textarea id="materialsNeeded" name="materialsNeeded" className="" placeholder="List materials..." onChange={this.handleChange}></textarea></div>
                   </li>
                 </ul>
               </div>

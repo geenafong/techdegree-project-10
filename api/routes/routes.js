@@ -20,27 +20,28 @@ router.get("/courses", function (req, res, next) {
 });
   
   // POST /api/users 201 - Creates a user, sets the Location header to '/', and returns no content
+  //added validation errors for project 10
    router.post('/users', function (req, res, next) {
-    // if (!request.body.firstName) {
-    //     const error = new Error("First name is required");
-    //     error.status = 400;
-    //     return next(error);
-    //   }
-    //   if (!request.body.lastName) {
-    //     const error = new Error("Last name is required");
-    //     error.status = 400;
-    //     return next(error);
-    //   }
-    //   if (!request.body.emailAddress) {
-    //     const error = new Error("Email address is required");
-    //     error.status = 400;
-    //     return next(error);
-    //   }
-    //   if (!request.body.password) {
-    //     const error = new Error("Password is required");
-    //     error.status = 400;
-    //     return next(error);
-    //   }
+    if (!req.body.firstName) {
+        const err = new Error("First name is required");
+        err.status = 400;
+        return next(err);
+      }
+      if (!req.body.lastName) {
+        const err = new Error("Last name is required");
+        err.status = 400;
+        return next(err);
+      }
+      if (!req.body.emailAddress) {
+        const err = new Error("Email address is required");
+        err.status = 400;
+        return next(err);
+      }
+      if (!req.body.password) {
+        const err = new Error("Password is required");
+        err.status = 400;
+        return next(error);
+      }
     let newUser = new User(req.body)
     newUser.validate(function (err, req, res) {
       if (err && err.name === 'ValidationError') {
@@ -49,6 +50,7 @@ router.get("/courses", function (req, res, next) {
         return next(err)
       }
     })
+      //checks that the email is in the system and that it is a valid email address, if not it sends a post request
       User.find({ emailAddress: req.body.emailAddress }, function (err, users) {
         if (users.length !== 0) {
           const error = new Error('Email address is already in the system.')
@@ -107,20 +109,7 @@ router.use(function(req, res, next){
         })
     }
 });
-// router.get('/users', (req, res, next) => {
-//       if(req.user) {
-//         User.find({})
-//           .exec((err, user) => {
-//             if(err) return next(err);
-//             res.status(200);
-//             res.json(user);
-//           });
-//        } else {
-//          const err = new Error("Please log in");
-//          err.status = 400;
-//          return next(err);
-//        }
-//     });
+
 // GET /api/users 200 - Returns the currently authenticated user
 router.get("/users", function (req, res, next) {
     User.find({}) 
@@ -153,12 +142,18 @@ router.post("/courses", function (req, res, next) {
             res.locals.id = newCourse._id
             res.status(201).send({ id: newCourse._id })
         })
-     } else if (err.errors.title || err.errors.description || err && err.name === 'ValidationError') {
-            const err = new Error("You must enter a title and description");
-            err.status = 400;
-            return next(err);
+     }  if (!req.body.title) {
+                const err = new Error("Please enter a title");
+                err.status = 400;
+                return next(err);
+              }
+        if (!req.body.description) {
+        const err = new Error("Please enter a description");
+        err.status = 400;
+        return next(err);
         }
 });
+
 // PUT /api/courses/:id 204 - Updates a course and returns no content
 router.put("/courses/:id", function (req, res, next) {
     if (req.course.user.toString() === req.user._id.toString()){
