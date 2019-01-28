@@ -103,8 +103,8 @@ class App extends Component {
                         <Route exact path='/' render={ () => <Redirect to='/courses'/>} />
                         <Route exact path="/courses" render={ () => <Courses />}/>
                         <Route exact path="/signin" render={ () => <UserSignIn signIn={this.signIn} />}/>    
-                        <Route exact path='/signup' component={UserSignUp} />
-                        <PrivateRoute exact path='/courses/create' component= {CreateCourse} />}/>
+                        <Route exact path='/signup' render={ () => <UserSignUp signIn={this.signIn} />}/>
+                        <PrivateRoute exact path='/courses/create' component= {CreateCourse}/>
                         <Route exact path='/courses/:id' render={ ({match}) => <CourseDetails id={match.params.id} />}/>
                         <PrivateRoute exact path='/courses/:id/update' component = {UpdateCourse} updateCourse= {this.updateCourse}/>                       
                         <Route exact path='/signout' render={() => <UserSignOut signOut={this.signOut} /> } />

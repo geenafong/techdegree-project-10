@@ -18,36 +18,60 @@ router.get("/courses", function (req, res, next) {
                 res.json(courses);
     });  
 });
-
-  // POST /api/users 201 - Creates a user, sets the Location header to "/", and returns no content
-  router.post("/users", function (req, res, next) {
-        const newUser = new User(req.body);
-        newUser.validate(function(err, req, res) {
-          if (err.name && err === 'ValidationError'){
-                err.status = 400;
-                err.message = err.errors;
-                return next(err)  
-          };
-        User.find({emailAddress:req.body.emailAddress}, function(err, users){
-            if(users.length !==0){
-                const err = new Error("This email address is already in use");
-                err.status = 400;
-                next(err); 
-            } else if(!/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/.test(req.body.emailAddress)){
-                const err = new Error("Please enter a valid email address")
-                err.status = 400
-                next(err)
+  
+  // POST /api/users 201 - Creates a user, sets the Location header to '/', and returns no content
+   router.post('/users', function (req, res, next) {
+    // if (!request.body.firstName) {
+    //     const error = new Error("First name is required");
+    //     error.status = 400;
+    //     return next(error);
+    //   }
+    //   if (!request.body.lastName) {
+    //     const error = new Error("Last name is required");
+    //     error.status = 400;
+    //     return next(error);
+    //   }
+    //   if (!request.body.emailAddress) {
+    //     const error = new Error("Email address is required");
+    //     error.status = 400;
+    //     return next(error);
+    //   }
+    //   if (!request.body.password) {
+    //     const error = new Error("Password is required");
+    //     error.status = 400;
+    //     return next(error);
+    //   }
+    let newUser = new User(req.body)
+    newUser.validate(function (err, req, res) {
+      if (err && err.name === 'ValidationError') {
+        err.status = 400
+        err.message = err.errors
+        return next(err)
+      }
+    })
+      User.find({ emailAddress: req.body.emailAddress }, function (err, users) {
+        if (users.length !== 0) {
+          const error = new Error('Email address is already in the system.')
+          error.status = 400
+  
+          next(error)
+        } else if (!/^(([^<>()[\]\\.,;:\s@']+(\.[^<>()[\]\\.,;:\s@']+)*)|('.+'))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(req.body.emailAddress)) {
+          const error = new Error('The email you entered is not a valid email address')
+          error.status = 400
+  
+          next(error)
+        } else {newUser.save(function (err, user) {
+            if (err) {
+              return next()
+            } else {
+              res.location('/')
+              res.sendStatus(201)
             }
-            else{
-                newUser.save(function(err, user){
-                    if(err) {return next(err)};
-                    res.location('/');
-                    res.sendStatus(201);
-                }) 
-            }      
-        });
-        })
-});
+          })
+        }
+      })
+    })
+  
 
 // GET /api/courses/:id 200 - Returns a the course (including the user that owns the course) for the provided course ID
 router.get("/courses/:id", function(req, res) {
@@ -83,7 +107,20 @@ router.use(function(req, res, next){
         })
     }
 });
-
+// router.get('/users', (req, res, next) => {
+//       if(req.user) {
+//         User.find({})
+//           .exec((err, user) => {
+//             if(err) return next(err);
+//             res.status(200);
+//             res.json(user);
+//           });
+//        } else {
+//          const err = new Error("Please log in");
+//          err.status = 400;
+//          return next(err);
+//        }
+//     });
 // GET /api/users 200 - Returns the currently authenticated user
 router.get("/users", function (req, res, next) {
     User.find({}) 

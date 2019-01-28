@@ -3,7 +3,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
 const UserSchema = new Schema({
@@ -51,20 +51,9 @@ UserSchema.pre("save", function(next){
             user.password = hash;
           next();
         });
-      });
     });
-UserSchema.pre("save", function(next){
-    let user = this;
-    User.findOne({emailAddress: this.emailAddress}, 'emailAddress', function(err, res){
-        if (res){
-            const err = new Error("Please enter a new email, that email already exists.");
-            err.status = 400;
-            return next(err);
-        } else {
-            next();
-        }
-    })
-})
+});
+
 
 const User = mongoose.model("User", UserSchema);
 const Course = mongoose.model("Course", CourseSchema);

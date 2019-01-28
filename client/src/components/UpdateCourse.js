@@ -1,7 +1,7 @@
  //renders an "Update Course" button that when clicked sends a PUT request to the REST API's /api/courses/:id route.
  import React, {Component} from 'react';
  import axios from 'axios';
- import {Link, withRouter} from 'react-router-dom';
+ import {withRouter} from 'react-router-dom';
  
  class UpdateCourse extends Component {    
    constructor() {
@@ -95,7 +95,8 @@
                </div>
              </div>
              <div className="grid-100 pad-bottom"><button className="button"  type="submit">Update Course</button>
-             <Link className="button button-secondary" to={`/courses`}>Cancel</Link></div>
+             <button className="button button-secondary" onClick={() => this.props.history.push(`/courses/${this.props.match.params.id}`)}>Cancel</button>
+             </div>
            </form>
          </div>
        </div>
