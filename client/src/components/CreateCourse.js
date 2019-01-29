@@ -35,6 +35,7 @@ class CreateCourse extends Component {
         }  
     }).then(res =>{
         this.props.history.push(`/courses`);
+    //specific errors based on the API results that renders into the html
     }).catch(err =>{
       if (err.response.status === 400) {
         this.setState({validationError: true, validMessage: "Validation Error"});

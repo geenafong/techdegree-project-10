@@ -13,12 +13,12 @@ class UserSignIn extends Component {
         emailAddress:""
         }
     }
-    //a event handler that changes the state of the component when the value changes
+    //an event handler that changes the state of the component when the value changes
     handleChange = e => {
         this.setState({[e.target.id]: e.target.value});
     }
 
-    //a event handler that calls the signIn method from the global state to check authentication
+    //an event handler that calls the signIn method from the global state to check authentication
     handleSubmit = e => {
         e.preventDefault();
         this.props.signIn(this.state.emailAddress, this.state.password)

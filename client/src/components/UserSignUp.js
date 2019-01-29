@@ -22,7 +22,7 @@ class UserSignUp extends Component {
 
         }
     }   
-
+    //used for the post route
     signUp = (firstName, lastName, emailAddress, password) => {
         axios.post('http://localhost:5000/api/users', {
           firstName: firstName,
@@ -37,6 +37,7 @@ class UserSignUp extends Component {
           }).then(response => {
             this.props.history.push('/courses')
           })
+          //Provides errors from the API and are used to render to the HTML
           .catch (error => {
             if (error.response.status === 400) {
                 this.setState({validationError: true, validMessage: "Validation Error"});
@@ -61,7 +62,7 @@ class UserSignUp extends Component {
     handleChange = e => {
         this.setState({[e.target.id]: e.target.value});
     }
-
+    //only allows for the page to submit if the passwords match
     confirmPass = e => {
         this.setState({confirmPassword: e.target.value});
         if (e.target.value === this.state.password) {

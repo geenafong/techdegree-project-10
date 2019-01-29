@@ -23,7 +23,7 @@ class Courses extends React.Component {
     })
      .catch(err => console.log('Unable to fetch data',err))
   };
- 
+ //finds all of the courses and renders to the page, provides a link to the course details page
   render() {
     let courses;
       courses = this.state.courses.map((course, index) => (

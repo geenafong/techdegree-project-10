@@ -38,7 +38,7 @@ class CourseDetails extends React.Component {
              console.log(err);
            }) 
    }
-
+   //used to delete a course if you are the authenticated user
     deleteCourse = (id) => {
       axios.delete(`http://localhost:5000/api/courses/${this.props.match.params.id}`,{  
        headers:{
@@ -50,10 +50,11 @@ class CourseDetails extends React.Component {
           console.log(err);
         }) 
       }    
+      //handles any type of changes that occur in the field
       handleChange = e => {
         this.setState({[e.target.id]: e.target.value});
       }
-    
+     //when someone submits the form, it runs the delete course method based on their id
       handleSubmit = e => {
         e.preventDefault();
         this.deleteCourse(this.props.id);

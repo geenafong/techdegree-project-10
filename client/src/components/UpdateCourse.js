@@ -52,6 +52,7 @@
         }  
   }).then(res =>{
           this.props.history.push(`/courses`);
+      //checks for validation errors that is rendered to the HTML based on the API errors
       }).catch(err =>{
         if (err.response.status === 400) {
           this.setState({validationError: true, validMessage: "Validation Error"});
@@ -64,7 +65,7 @@
     handleChange = e => {
       this.setState({[e.target.id]: e.target.value});
     }
-  
+   //runs the update course method on submit
     handleSubmit = e => {
       e.preventDefault();
       this.updateCourse(this.state.title, this.state.description, this.state.estimatedTime, this.state.materialsNeeded, this.state.id)
