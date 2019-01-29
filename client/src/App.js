@@ -82,7 +82,6 @@ class App extends Component {
       componentDidMount() {
         if(localStorage.user){
           let user = JSON.parse(window.localStorage.getItem('user'))
-          console.log(user)
           this.signIn(user.emailAddress, user.password)
         }
     }
