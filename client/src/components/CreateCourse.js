@@ -14,7 +14,7 @@ class CreateCourse extends Component {
         materialsNeeded:"",
         validationError:false,
         titleError: "",
-        descriptionError: "",
+        descError: "",
         err:"",
         isLoaded: false,
         signedIn: false,
@@ -33,21 +33,21 @@ class CreateCourse extends Component {
      headers:{
       'Authorization': JSON.parse(window.localStorage.getItem('auth'))
         }  
-  }).then(res =>{
-          this.props.history.push(`/courses`);
-      }).catch(err =>{
-        if (err.res.status === 400) {
-          this.setState({validationError: true, validationMessage: "Validation Error"});
-          if (err.res.data.message === "Please enter a title") {
-            this.setState({titleError: "Please enter a title"})
-          }
-          if (err.res.data.message === "Please enter a description") {
-            this.setState({descriptionError: "Please enter a description"})
-          }
-        } else if (err.res.status === 500) {
-          console.log(err);
+    }).then(res =>{
+        this.props.history.push(`/courses`);
+    }).catch(err =>{
+      if (err.response.status === 400) {
+        this.setState({validationError: true, validMessage: "Validation Error"});
+        if (err.response.data.message === "Title is required") {
+          this.setState({titleError: "Title is required"})
         }
-      });
+        if (err.response.data.message === "Description is required") {
+          this.setState({descError: "Description is required"})
+        }
+      } else if (err.response.status === 500) {
+        console.log(err);
+      }
+    });
     };
     handleChange = e => {
       this.setState({[e.target.id]: e.target.value});
@@ -63,11 +63,11 @@ class CreateCourse extends Component {
          <h1>Create Course</h1>
          <div>
           <div>
-            <h2 className="validation--errors--label">{this.state.validationMessage}</h2>
+            <h2 className="validation--errors--label">{this.state.validMessage}</h2>
             <div className="validation-errors">
               <ul>
                 <li>{this.state.titleError}</li>
-                <li>{this.state.descriptionError}</li>
+                <li>{this.state.descError}</li>
               </ul>
             </div>
           </div>
@@ -105,4 +105,4 @@ class CreateCourse extends Component {
     }
 };
 
-export default withRouter (CreateCourse);
+export default withRouter(CreateCourse);

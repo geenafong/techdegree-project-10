@@ -36,6 +36,8 @@ class UserSignIn extends Component {
             <div className="bounds">
                 <div className="grid-33 centered signin">
                 <h1>Sign In</h1>
+                {this.state.emailPassError}
+                {this.state.retry}
                 <form onSubmit={this.handleSubmit}>
                         <div><input id="emailAddress" name="emailAddress" onChange ={this.handleChange} type="text" className="" placeholder="Email Address" ref={(input) => this.user = input} value={this.state.emailAddress} /> </div>
                         <div><input id="password" name="password" onChange={this.handleChange} type="password" className="" placeholder="Password" ref={(input) => this.password = input} value={this.state.password} /> </div>

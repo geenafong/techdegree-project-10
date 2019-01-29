@@ -53,7 +53,12 @@
   }).then(res =>{
           this.props.history.push(`/courses`);
       }).catch(err =>{
-        console.log(err);
+        if (err.response.status === 400) {
+          this.setState({validationError: true, validMessage: "Validation Error"});
+          if (err.response.data.message === 'You are not able to edit this course because you did not create it.') {
+            this.setState({userError: 'You are not able to edit this course because you did not create it.'})
+          }
+        }
       }) 
     }
     handleChange = e => {
@@ -70,6 +75,12 @@
        <div className="bounds course--detail">
          <h1>Update Course</h1>
          <div>
+         <h2 className="validation--errors--label">{this.state.validMessage}</h2>
+            <div className="validation-errors">
+              <ul>
+              {this.state.userError}
+              </ul>
+            </div>
          <form onSubmit={this.handleSubmit}>
              <div className="grid-66">
                <div className="course--header">

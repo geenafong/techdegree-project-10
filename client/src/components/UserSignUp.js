@@ -14,6 +14,8 @@ class UserSignUp extends Component {
             user: "",
             password: "",
             confirmPassword:"",
+            fieldError:"",
+            emailDupError:"",
             error:"",
             signedUp: false,
             validation: ""
@@ -37,12 +39,21 @@ class UserSignUp extends Component {
           })
           .catch (error => {
             if (error.response.status === 400) {
-              if (error.response.data.message !== "") {
-              this.setState({
-                error: error.response.data.message
-            })
-        }
-      }
+                this.setState({validationError: true, validMessage: "Validation Error"});
+            }
+            if (error.response.data.message === "First name is required" || "Last name is required" || "Email address is required" || "Password is required") {
+                this.setState({
+                    fieldError: "You must complete all entry items to sign up" 
+                    })
+            }
+            if (error.response.data.message === 'Email address is already in the system.') {
+                this.setState({
+                    emailDupError: 'Email address is already in the system'})
+            }
+            if (error.response.data.message === 'The email you entered is not a valid email address') {
+                this.setState({
+                    invalidEmailError: 'The email you entered is not a valid email address'})
+            }   
     })
     }
 
@@ -67,28 +78,21 @@ class UserSignUp extends Component {
     }
 
     render() {
-        // let err= props.err
-        // let emailValidation;
-        // let sameEmail;
-        // let confirmPw;
-
-        // if(err === "Please enter a valid email address"){
-        //     emailValidation = <li>Please enter a valid email address</li>
-        // } else if(err === "This email address is already in use"){
-        //     sameEmail = <li>This email address is already in use</li>
-        // } else if(err === "Passwords do not match"){
-        //     confirmPw === <li>Passwords do not match</li>
-        // }
+        let wrongPassword ='';
+        if(this.state.password !== this.state.confirmPassword){
+            wrongPassword = <li> Passwords do not match </li>
+        }
         return (
             <div className="bounds">
                 <div className="grid-33 centered signin">
                 <h1>Sign Up</h1>
-                    <h2 className="validation--errors--label">Validation errors</h2>
+                    <h2 className="validation--errors--label">{this.state.validMessage}</h2>
                     <div className="validation-errors">
                      <ul>
-                     {/* {emailValidation}
-                     {sameEmail}
-                     {confirmPw} */}
+                     <li>{this.state.fieldError}</li>
+                     <li>{this.state.emailDupError}</li>
+                     <li>{this.state.invalidEmailError}</li>
+                     {wrongPassword}
                      </ul>
                      </div>
                      <form onSubmit={this.handleSubmit}>

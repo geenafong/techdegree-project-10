@@ -6,7 +6,7 @@ const Course = require("../models").Course;
 const User = require("../models").User;
 
 const auth = require("basic-auth");
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 // GET /api/courses 200 - Returns a list of courses (including the user that owns each course)
 router.get("/courses", function (req, res, next) {
@@ -96,7 +96,7 @@ router.use(function(req, res, next){
                         req.user = user;
                         next();
                     } else {
-                        const err = new Error("You are currently not authorized.")
+                        const err = new Error("The email or password you entered does not match what we have")
                         err.status = 401;
                         return next(err);
                     }
@@ -142,13 +142,14 @@ router.post("/courses", function (req, res, next) {
             res.locals.id = newCourse._id
             res.status(201).send({ id: newCourse._id })
         })
-     }  if (!req.body.title) {
-                const err = new Error("Please enter a title");
-                err.status = 400;
-                return next(err);
-              }
+     }  
+     if(!req.body.title) {
+        const err = new Error("Title is required");
+        err.status = 400;
+        return next(err);
+        }
         if (!req.body.description) {
-        const err = new Error("Please enter a description");
+        const err = new Error("Description is required");
         err.status = 400;
         return next(err);
         }
@@ -157,7 +158,7 @@ router.post("/courses", function (req, res, next) {
 // PUT /api/courses/:id 204 - Updates a course and returns no content
 router.put("/courses/:id", function (req, res, next) {
     if (req.course.user.toString() === req.user._id.toString()){
-        req.course.update(req.body, { upsert: true, runValidators: true }, function(err, result){
+        req.course.update(req.body, function(err, result){
             if(err) return next(err);
             return res.sendStatus(204);
         });

@@ -28,6 +28,7 @@ class App extends Component {
         emailAddress:'',
         courses: [],
         currentUser:false,
+        validation: false,
         signedIn:false,
         currUser: false,
         isAuthenticated:false
@@ -50,6 +51,7 @@ class App extends Component {
                 signedIn:true,
                 isAuthenticated:true,
                 currUser:true,
+                validation:true,
                 validUser:true
             });
             // from: https://www.robinwieruch.de/local-storage-react/
@@ -59,14 +61,15 @@ class App extends Component {
         } 
         //when a user is not in the user database, state is changed to false and they do not log in
         }).catch(err => {
-                if(err) {
-                    this.setState({
-                        signedIn:false,
-                    });
-                    console.log(err);
+                if(err.response.status === 401) {
+                    if(err.response.data.message === "The email or password you entered does not match what we have")
+                    this.setState({emailPassError:"The email or password you entered does not match what we have"});
                 }
-            })
-        }
+                else if(err.response.data.message === "You are not logged in. Please try again."){
+                    this.setState({retry:"You are not logged in. Please try again."});
+                }
+        })
+    }
       //a method used to remove the authenticated user and password from the global state
       signOut = () => {
         this.setState({

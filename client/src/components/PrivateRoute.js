@@ -1,33 +1,23 @@
 //From https://reacttraining.com/react-router/web/example/auth-workflow
-import React from 'react';
-import {
-    Route, 
-    Redirect} from 'react-router-dom';
-import { Consumer } from './Context'
+import React from "react";
+import {Route, Redirect} from "react-router-dom";
+import {Consumer} from './Context';
 
-//defines a higher order component for configuring protected routes
-function PrivateRoute({ component: Component, ...rest }) {
-    return (
+//If user is currently signed in, displays requested component (Create Course). If not, takes to sign in page. Used project resource link and https://auth0.com/blog/react-router-4-practical-tutorial/
+const PrivateRouteCreate = ({ component: Component, ...rest }) => {
+  return (
     <Consumer>
-     {context => {
-         return(
-            <Route
-            {...rest}
-            render={props =>
-                context.isAuthenticated ? (
-                <Component {...props}/>
-                ) : (
-                <Redirect
-                    to={{
-                    pathname: "/signIn",
-                    }}
-                />
-                )
-            }
-            />
-         )
+      { context => {
+        return(
+          <Route {...rest} render={props =>
+          context.isAuthenticated
+          ? (<Component {...props} {...rest} />)
+          : (<Redirect to={{pathname: "/signin", state: { from: props.location }}} />)}
+          />
+        )
       }}
     </Consumer>
   );
 }
-export default PrivateRoute;
+
+export default PrivateRouteCreate;
