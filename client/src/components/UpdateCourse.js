@@ -4,8 +4,8 @@
  import {withRouter} from 'react-router-dom';
  
  class UpdateCourse extends Component {    
-   constructor() {
-     super();
+  constructor() {
+    super(); 
      this.state = {
          courses:[],
          description:"",
@@ -13,11 +13,17 @@
          id:"",
          user:"",
          userId:"",
+         titleError:"",
+         descError:"",
+         validMessage:"",
          estimatedTime:"",
+         materialsNeeded:"",
+         validationError:false,
          isLoaded: false,
          signedIn: false
      }
-   }
+  }
+   
   //  GETS the courses
    componentDidMount() {
      axios.get(`http://localhost:5000/api/courses/${this.props.match.params.id}`)
@@ -39,7 +45,7 @@
   }
  
   //method for a PUT request to update all of the changes that are made
-  updateCourse = (title, description, estimatedTime,materialsNeeded, id) => {
+  updateCourse = (title, description, estimatedTime, materialsNeeded, id) => {
     axios.put(`http://localhost:5000/api/courses/${id}`,{
       title:title,
       description: description,
@@ -53,12 +59,18 @@
   }).then(res =>{
           this.props.history.push(`/courses`);
       //checks for validation errors that is rendered to the HTML based on the API errors
-      }).catch(err =>{
-        if (err.response.status === 400) {
-          this.setState({validationError: true, validMessage: "Validation Error"});
-          if (err.response.data.message === 'You are not able to edit this course because you did not create it.') {
-            this.setState({userError: 'You are not able to edit this course because you did not create it.'})
-          }
+    }).catch(err =>{
+      if (err.response.status === 400) {
+        this.setState({validationError: true, validMessage: "Validation Error"});
+        if (err.response.data.message === "Title is required") {
+          this.setState({titleError: "Title is required"})
+        }
+        if (err.response.data.message === "Description is required") {
+          this.setState({descError: "Description is required"})
+
+        }
+      } else if (err.response.status === 500) {
+        console.log(err);
         }
       }) 
     }
@@ -79,7 +91,8 @@
          <h2 className="validation--errors--label">{this.state.validMessage}</h2>
             <div className="validation-errors">
               <ul>
-              {this.state.userError}
+              <li>{this.state.titleError}</li>
+              <li>{this.state.descError}</li>
               </ul>
             </div>
          <form onSubmit={this.handleSubmit}>
@@ -87,7 +100,7 @@
                <div className="course--header">
                  <h4 className="course--label">Course</h4>
                  <div><input id="title" name="title" type="text" className="input-title course--title--input" placeholder="Course title..." onChange={this.handleChange} value={this.state.title}></input></div>
-                 <p>{(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>               </div>
+                 <p>By: {(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>               </div>
                <div className="course--description">
                <div><textarea id="description" name="description" className="" placeholder="Course description..." onChange={this.handleChange} value={this.state.description}></textarea></div>
                </div>
@@ -97,7 +110,7 @@
                  <ul className="course--stats--list">
                    <li className="course--stats--list--item">
                      <h4>Estimated Time</h4>
-                     <div><input id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" onChange={this.handleChange} value={this.state.estimatedTime} /></div>
+                     <div><input onChange={this.handleChange} id="estimatedTime" name="estimatedTime" type="text" className="course--time--input" placeholder="Hours" value={this.state.estimatedTime || ''}/></div> 
                    </li>
                    <li className="course--stats--list--item">
                      <h4>Materials Needed</h4>

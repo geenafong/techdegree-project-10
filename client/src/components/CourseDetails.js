@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import {Link, withRouter} from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import { Consumer } from './Context'
 
 //This component provides the "Course Detail" screen by retrieving the detail for a course from the REST API's /api/courses/:id route and rendering the course. 
-class CourseDetails extends React.Component {    
+class CourseDetails extends Component {    
     constructor() {
         super();
         this.state = {
@@ -13,6 +13,7 @@ class CourseDetails extends React.Component {
             title:"",
             description:"",
             user:"",
+            estimatedTime:"",
             courses:[],
             isLoaded: false,
             signedIn: false,
@@ -89,11 +90,11 @@ class CourseDetails extends React.Component {
           <div className="grid-66">
             <div className="course--header">
               <h4 className="course--label">Course</h4>
-              <h3 className="course--title">{this.state.courses.title}</h3>
-              <p>By: {(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"} </p>
+              <h3 className="course--title">{this.state.title}</h3>
+              <p>By: {(this.state.courses.user) ? this.state.courses.user.firstName + " " + this.state.courses.user.lastName : "Instructor Not Listed"}</p>
             </div>
             <div className="course--description">
-            <ReactMarkdown>{this.state.courses.description}</ReactMarkdown>
+            <ReactMarkdown>{this.state.description}</ReactMarkdown>
             </div>
           </div>
           <div className="grid-25 grid-right">
@@ -101,12 +102,12 @@ class CourseDetails extends React.Component {
               <ul className="course--stats--list">
                 <li className="course--stats--list--item">
                   <h4>Estimated Time</h4>
-                  <h3>{(this.state.courses.estimatedTime) ? this.state.courses.estimatedTime : "Estimated Time not specified"}</h3>
+                  <h3>{this.state.estimatedTime}</h3>
                 </li>
                 <li className="course--stats--list--item">
                   <h4>Materials Needed</h4>
                   <ul>
-                  <ReactMarkdown>{this.state.courses.materialsNeeded}</ReactMarkdown>
+                  <ReactMarkdown>{this.state.materialsNeeded}</ReactMarkdown>
                     
                   </ul>
                 </li>

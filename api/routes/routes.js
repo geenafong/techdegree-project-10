@@ -158,10 +158,20 @@ router.post("/courses", function (req, res, next) {
 // PUT /api/courses/:id 204 - Updates a course and returns no content
 router.put("/courses/:id", function (req, res, next) {
     if (req.course.user.toString() === req.user._id.toString()){
+        if(req.body.title && req.body.description) {
         req.course.update(req.body, function(err, result){
             if(err) return next(err);
-            return res.sendStatus(204);
-        });
+            res.sendStatus(204)        })
+    } if(!req.body.title) {
+            const err = new Error("Title is required");
+            err.status = 400;
+            return next(err);
+            }
+            if (!req.body.description) {
+                const err = new Error("Description is required");
+                err.status = 400;
+                return next(err);
+                }
     } else if (err && err.name === 'ValidationError') {
         err.status = 400
     }else {

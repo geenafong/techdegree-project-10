@@ -15,6 +15,7 @@ class CreateCourse extends Component {
         validationError:false,
         titleError: "",
         descError: "",
+        validMessage:"",
         err:"",
         isLoaded: false,
         signedIn: false,
