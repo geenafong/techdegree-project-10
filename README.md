@@ -1,6 +1,6 @@
 # techdegree-project-10.5
 To run this project:
-1. Open two terminals
+1. Open two terminals.
 2. With the first terminal, cd to the api file. Then npm install, then npm run seed, then npm start.
 3. With the second terminal, cd to the client file, then npm install, then npm start.
 
